@@ -1,0 +1,24 @@
+.loginBtn{
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+.loginBtn:hover{
+    color: black;
+}
+
+.signin{
+    color: goldenrod;
+    background-color: rgb(50,50,50);
+}
+.header{
+    text-align: center;
+    background-color: rgb(50,50,50);
+}
+
+.myForm{
+    text-align: center;
+}

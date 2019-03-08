@@ -1,0 +1,20 @@
+.Input{
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(61, 59, 60);
+}
+
+.Input:focus{
+    background-color: rgb(225, 225, 240);
+    transition: 1.5s;
+}
+
+.matchFail{
+    background-color: salmon;
+    transition: 1.5s;
+}
+
+.matchSuccess{
+    background-color: lightgreen;
+    transition: 1.5s;
+}

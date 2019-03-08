@@ -1,0 +1,12 @@
+.Btn{
+    border-radius: 5px;
+    border: none;
+    /* background-color: goldenrod; */
+    
+}
+
+.Btn:hover{
+    cursor: pointer;
+    /* background-color: lightgreen; */
+    /* color: blue; */
+}

@@ -1,0 +1,23 @@
+.Navbar{
+    margin: 10px 10px;
+    /* box-sizing: border-box;
+    display: block;
+    width: 100%; */
+    display: flex;
+    
+
+    /* flex-wrap: wrap; */
+    /* flex-direction: row; */
+}
+
+.navlink{
+    color: goldenrod;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navlink:hover{
+    text-decoration: none;
+    color: darkgoldenrod;
+}

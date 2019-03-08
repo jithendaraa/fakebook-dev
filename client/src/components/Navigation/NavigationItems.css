@@ -1,0 +1,13 @@
+.Navbar{
+    
+    /* box-sizing: border-box;
+    display: block;
+    width: 100%; */
+    display: flex;
+    float: right;
+    margin: 5px 0px;
+    padding-right: 15px;
+
+    /* flex-wrap: wrap; */
+    /* flex-direction: row; */
+}

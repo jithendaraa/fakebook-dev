@@ -1,0 +1,46 @@
+.header{
+    color: orangered;
+    float: left;
+    /* padding-top: 15px; */
+    margin: 15px 15px;
+}
+
+.navbar{
+    /* display: inline-block; */
+    text-align: center;
+    width: 100%;
+    float: right;
+    background-color: rgb(50,50,50);
+}
+
+.pad{
+    padding-top: 60px;
+}
+
+.separator{
+    width: 90%;
+    /* position: relative; */
+    /* top: 60px; */
+    height: 2px;
+    background-color: rgb(100,100,100);
+    border-radius: 1px;
+}
+
+.guestHome{
+    text-align: center;
+    background-color: rgb(50,50,50);
+}
+
+.pageContent{
+    /* width: 50%; */
+    background-color: rgb(50,50,50);
+    color: goldenrod;
+    /* padding-right: 50%; */
+    padding-left: 5%;
+    float: left;
+    
+}
+
+
+
+
