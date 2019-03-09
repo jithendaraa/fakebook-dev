@@ -1,22 +1,35 @@
 const express = require('express');
-require('./services/passport');
-const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
+const keys = require('./config/keys');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 
-let urlencodedParser = bodyParser.urlencoded({ extended: false });
+require('./models/User');
+require('./services/passport');
+
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(() => console.log("Connected <3"));
 
 const app = express();
-authRoutes(app);
 
-// console.developers.google.com
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-// app.post('/signin', urlencodedParser, (req, res) => {
-//   // res.send("Welcome to Post Req" + req.body.name);
-//   console.log(req.body);
-//   // res.render("app", {data: req.body});
-//   // req.render('./client/app', )
-// })
 
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => `Server running on port ${PORT}`);
+
+require('./routes/authRoutes')(app);
+
+
+
+
+
+
+const port = 5000;
+
+app.listen(port, () => `Server running on port ${port}`);
