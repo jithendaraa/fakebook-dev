@@ -3,6 +3,7 @@ import React,{ Component } from 'react';
 import classes from './Signin.css';
 
 import Input from '../../UI/Input/Input';
+// import GuestHome from '../../GuestHome/GuestHome';
 import ActButton from '../../UI/Button/ActButton';
 
 class Signin extends Component {
@@ -23,6 +24,7 @@ class Signin extends Component {
     render(){
         return(
             <div className={classes.signin}>
+                {/* {GuestHome} */}
                 <h3 className={classes.header}>Signin !</h3>
                 <form className={classes.myForm}>
                     <Input

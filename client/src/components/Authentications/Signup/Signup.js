@@ -4,6 +4,7 @@ import React,{ Component } from 'react';
 import classes from './Signup.css';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
+import GoogleOAuthBtn from '../../UI/Button/GoogleOAuthBtn';
 
 // import axios from 'axios';
 
@@ -43,9 +44,10 @@ class Signup extends Component {
 
         return(
             <div className={classes.signup}>
+            
                 {/* <h3 className={classes.header}>Signup Wrapper!</h3> */}
                 <div >
-                    <form className={classes.myForm} id="signupForm" method="POST" action="/signin"  >
+                    {/* <form className={classes.myForm} id="signupForm" method="POST" action="/signin"  >
                         <Input
                             placeholder="Name"
                             type="text"
@@ -86,8 +88,11 @@ class Signup extends Component {
                             id="signupBtn"
                             disabled="true"
                             ></Button>
-                    </form>
+                        <h4>Or Signup with Google</h4>
+                        
+                    </form> */}
                 </div>
+                <GoogleOAuthBtn width="300" height="50"></GoogleOAuthBtn>
             </div>
         )
     }

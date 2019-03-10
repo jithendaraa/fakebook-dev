@@ -1,7 +1,10 @@
 .signup{
     color: goldenrod;
     background-color: rgb(50,50,50);
-    padding-top: 50px;
+    padding-top: 150px;
+    /* align-content: center;
+    align-items: center; */
+    text-align: center;
 }
 
 .header{

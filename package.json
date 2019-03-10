@@ -1,5 +1,5 @@
 {
-  "name": "fakebook",
+  "name": "fakebook-server",
   "version": "1.0.0",
   "description": "React express",
   "main": "server.js",
@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Jith",
   "license": "ISC",
@@ -23,7 +25,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0",
     "react": "^16.8.4",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.4.0-beta.7"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"

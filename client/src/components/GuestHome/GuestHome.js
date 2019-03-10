@@ -11,8 +11,10 @@ const guestHome = () => (
         <div className={classes.navbar}>
             <h4 className={classes.header}>Fakebook</h4>
             <NavigationItems />
-            {/* <div className={classes.separator}></div> */}
+            
         </div>
+
+        
 
         <center className={classes.pad}>
             <div className={classes.separator}></div>

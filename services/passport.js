@@ -13,26 +13,35 @@ passport.deserializeUser((id, done) => {                        //Deserialize co
     User.findById(id).then(user => {
         done(null, user);
     });
-});                          
+});
 
 passport.use(
     new GoogleStrategy({
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback',
-    }, (accessToken, refreshToken, profile, done) => {
+    }, async (accessToken, refreshToken, profile, done) => {
 
-        User.findOne({ googleId: profile.id })
-            .then((existingUser) => {
-                if (existingUser) {
-                    done(null, existingUser);
-                }
-                else {
-                    new User({ googleId: profile.id })
-                        .save()
-                        .then(user => done(null, user));
-                }
-            })
-    })
+        console.log(profile);
+        console.log(profile.id);
+        console.log(profile.displayName);
+        console.log(profile.emails[0].value);
+        // console.log(profile.gender)
+        console.log("hi");
+        const existingUser = await User.findOne({ googleId: profile.id });
+        if (existingUser) {
+            // console.log(profile);
+            return done(null, existingUser);
+        }
+        else {
+            const user = await new User({ 
+                    googleId: profile.id,
+                    email: profile.emails[0].value,
+                    displayName: profile.displayName 
+                }).save();
+            done(null, user);
+        }
+        }
+    )
 );
 
