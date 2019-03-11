@@ -1,0 +1,8 @@
+.NewPostWrapper{
+    border: 1px solid black;
+    width: 50%;
+    border-radius: 20px;
+    margin: border-box;
+    overflow: hidden;
+    
+}

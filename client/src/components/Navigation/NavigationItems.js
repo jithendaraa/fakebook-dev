@@ -5,9 +5,9 @@ import classes from './NavigationItems.css';
 
 const navigationItems = () => (
     <ul className={classes.Navbar}>
-        <NavigationItem link="/landing" linkTo="Home"></NavigationItem>
-        <NavigationItem link="/landing/signup" linkTo="Sign Up"></NavigationItem>
-        <NavigationItem link="/landing/signin" linkTo="Sign In"></NavigationItem>
+        <NavigationItem link="/" linkTo="Home"></NavigationItem>
+        <NavigationItem link="/signup" linkTo="Sign Up"></NavigationItem>
+        <NavigationItem link="/signin" linkTo="Sign In"></NavigationItem>
     </ul>
 );
 

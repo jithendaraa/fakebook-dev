@@ -1,8 +1,9 @@
 .header{
-    color: orangered;
+    color: black;
     float: left;
     /* padding-top: 15px; */
     margin: 15px 15px;
+    /* font-size: 30px; */
 }
 
 .navbar{
@@ -10,31 +11,31 @@
     text-align: center;
     width: 100%;
     float: right;
-    background-color: rgb(50,50,50);
+    background-color: rgb(148, 112, 118);
 }
 
 .pad{
-    padding-top: 60px;
+    padding-top: 65px;
 }
 
 .separator{
-    width: 90%;
+    width: 95%;
     /* position: relative; */
     /* top: 60px; */
     height: 2px;
-    background-color: rgb(100,100,100);
+    background-color: rgb(78, 14, 14);
     border-radius: 1px;
 }
 
 .guestHome{
     text-align: center;
-    background-color: rgb(50,50,50);
+    background-color: rgb(148, 112, 118);
 }
 
 .pageContent{
     /* width: 50%; */
-    background-color: rgb(50,50,50);
-    color: goldenrod;
+    background-color: rgb(148, 112, 118);
+    color: black;
     /* padding-right: 50%; */
     padding-left: 5%;
     float: left;

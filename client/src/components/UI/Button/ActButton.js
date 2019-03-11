@@ -17,7 +17,7 @@ const actButton = (props) => {
                 className={classes.Btn}
                 style={style}
                 type={props.type}
-                id={props.id}>{props.btnText}</button>
+                id={props.id}>{props.btnText}{props.children}</button>
         </Aux>
     );
 }

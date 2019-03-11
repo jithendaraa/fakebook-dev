@@ -1,0 +1,11 @@
+.Header{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.SubHeader{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}

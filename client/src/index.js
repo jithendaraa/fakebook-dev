@@ -5,7 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 
-import 'materialize-css/dist/css/materialize.min.css';
+// import 'materialize-css/dist/css/materialize.min.css';
+import 'typeface-roboto';
 import authReducer from './reducers/authReducer';
 
 import { BrowserRouter } from 'react-router-dom';

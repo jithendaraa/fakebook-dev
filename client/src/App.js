@@ -6,7 +6,10 @@ import React, { Component } from 'react';
 
 import Signup from './components/Authentications/Signup/Signup';
 import Signin from './components/Authentications/Signin/Signin';
-import GuestHome from './components/GuestHome/GuestHome';
+import NewPost from './components/loggedInComponents/NewPost/NewPost';
+import NewStory from './components/loggedInComponents/NewStory/NewStory';
+import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
+import Home from './components/Home/Home';
 
 // import NavigationItems from './components/Navigation/NavigationItems';
 
@@ -24,15 +27,20 @@ class App extends Component {
     // console.log(1);
   }
 
+
   render() {
 
+    
     return (
       <div>
-        <Route path="/landing" component={GuestHome}></Route>
-        <Route path="/posts/new" exact component={newPost}></Route>
-        <Route path="/posts" exact component={posts}></Route>
-        <Route path="/landing/signup" component={Signup}></Route>
-        <Route path="/landing/signin" component={Signin}></Route>
+        <Route path="/" exact component={Home}></Route>
+        {/* <Route path="/posts/new" exact component={newPost}></Route> */}
+        {/* <Route path="/posts" exact component={posts}></Route> */}
+        <Route path="/signup" component={Signup}></Route>
+        <Route path="/signin" component={Signin}></Route>
+        <Route path="/newPost" component={NewPost}></Route>
+        <Route path="/newStory" component={NewStory}></Route>
+        <Route path="/addFrnd" component={AddFrnd}></Route>
       </div>
     );
   }

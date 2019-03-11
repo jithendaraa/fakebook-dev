@@ -4,6 +4,7 @@ import React from 'react';
 
 import Aux from '../../../hoc/Auxx/Auxx';
 import Glogo from '../../../assets/logos/googleLogo.jpg';
+import Button from '@material-ui/core/Button';
 
 
 const googleOAuthBtn = (props) => {
@@ -11,7 +12,7 @@ const googleOAuthBtn = (props) => {
 
     let btnStyle = {
         width: "310px",
-        height: "60px",
+        height: "90px",
         backgroundColor: 'white',
         textAlign: 'center',
         cursor: 'pointer',
@@ -25,12 +26,12 @@ const googleOAuthBtn = (props) => {
         height: "50px",
         borderRadius: "5px",
         float: "left",
-        paddingTop: "4px"
+        paddingTop: "15px"
     };
 
     let bstyle = {
-        fontSize: "25px",
-        paddingLeft: "5px"
+        fontSize: "20px",
+        paddingLeft: "0px"
     };
 
     let astyle = {
@@ -41,12 +42,13 @@ const googleOAuthBtn = (props) => {
 
     return (
         <Aux>
-            <button style={btnStyle}>
+            <Button variant="contained" color="white" style={btnStyle}>
                 <a href='/auth/google' style={astyle}>
                     <img src={Glogo} style={imgStyle} />
                     <p><b style={bstyle}>  Signup with Google</b></p>
                 </a>
-            </button>
+            </Button>
+            
         </Aux>
     );
 }

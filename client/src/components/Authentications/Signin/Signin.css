@@ -11,12 +11,12 @@
 }
 
 .signin{
-    color: goldenrod;
-    background-color: rgb(50,50,50);
+    color: black;
+    background-color: rgb(148, 112, 118);
 }
 .header{
     text-align: center;
-    background-color: rgb(50,50,50);
+    background-color: rgb(148, 112, 118);
 }
 
 .myForm{
