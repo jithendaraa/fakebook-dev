@@ -53,7 +53,7 @@ const button = (props) => {
                 id={props.id}
                 disabled="false">{props.btnText}</button> */}
                 <a href={props.href} style={aStyle}>
-                    <Button type={props.type} variant="contained" color="primary">{props.btnText}</Button>
+                    <Button type={props.type} variant="contained" color="primary" style={{width: props.width, height: props.height, fontSize: props.fontSize}}>{props.btnText}</Button>
                 </a>
         </Aux>
     );

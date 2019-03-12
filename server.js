@@ -7,7 +7,9 @@ const passport = require('passport');
 require('./models/User');
 require('./services/passport');
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(() => console.log("Connected <3"));
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(() => console.log("connected <3"));             //Not connecting on hostel wifi for some reason :/
+
+
 
 const app = express();
 

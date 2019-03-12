@@ -34,14 +34,15 @@ passport.use(
             return done(null, existingUser);
         }
         else {
-            const user = await new User({ 
-                    googleId: profile.id,
-                    email: profile.emails[0].value,
-                    displayName: profile.displayName,
-                    friends: []
-                }).save();
+            const user = await new User({
+                googleId: profile.id,
+                email: profile.emails[0].value,
+                displayName: profile.displayName,
+                myFriends: [],
+                myPosts: []
+            }).save();
             done(null, user);
         }
-        }
+    }
     )
 );
