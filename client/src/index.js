@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 // import 'materialize-css/dist/css/materialize.min.css';
 import 'typeface-roboto';
 import authReducer from './reducers/authReducer';
+import postsReducer from './reducers/postsReducer';
 
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -17,10 +18,11 @@ import { combineReducers } from 'redux';
 
 
 const reducers = combineReducers({
-    auth: authReducer
+    auth: authReducer,                               //state.auth      
+    posts: postsReducer                              //state.post
 });
 
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk));                   //Store created from reducers
 
 const app = (<BrowserRouter><Provider store={store}><App /></Provider></BrowserRouter>);
 

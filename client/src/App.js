@@ -10,6 +10,7 @@ import NewPost from './components/loggedInComponents/NewPost/NewPost';
 import NewStory from './components/loggedInComponents/NewStory/NewStory';
 import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
 import Home from './components/Home/Home';
+import MyPosts from './components/loggedInComponents/Posts/MyPosts';
 
 // import NavigationItems from './components/Navigation/NavigationItems';
 
@@ -24,27 +25,23 @@ class App extends Component {
 
   componentDidMount() {
     this.props.fetchUser();
-    // console.log(1);
   }
 
-
   render() {
-
-    
     return (
       <div>
         <Route path="/" exact component={Home}></Route>
-        {/* <Route path="/posts/new" exact component={newPost}></Route> */}
+        <Route path="/newPost" exact component={NewPost}></Route>
         {/* <Route path="/posts" exact component={posts}></Route> */}
         <Route path="/signup" component={Signup}></Route>
         <Route path="/signin" component={Signin}></Route>
-        <Route path="/newPost" component={NewPost}></Route>
+        {/* <Route path="/newPost" component={NewPost}></Route> */}
+        <Route path="/myPosts" exact component={MyPosts}></Route>
         <Route path="/newStory" component={NewStory}></Route>
         <Route path="/addFrnd" component={AddFrnd}></Route>
       </div>
     );
   }
-
 }
 
 export default connect(null, actions)(App);

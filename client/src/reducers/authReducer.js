@@ -1,6 +1,5 @@
 import { FETCH_USER } from '../actions/actionTypes';
 
-
 export default function(state = null, action) {
     // console.log(action);
     switch(action.type) {

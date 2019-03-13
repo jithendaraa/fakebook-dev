@@ -10,8 +10,6 @@ const aStyle = {
 
 class Logout extends Component {
 
-    // userName = () => <div>Logout {this.props.auth.displayName}</div>;
-
     logout = () => (
         <div>
             {/* <b>Logged in as: {this.userName()}</b> */}

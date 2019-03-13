@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from './Button.css';
+// import classes from './Button.css';
 
 import Aux from '../../../hoc/Auxx/Auxx';
 import Button from '@material-ui/core/Button';
@@ -46,15 +46,14 @@ const button = (props) => {
 
     return (
         <Aux>
-            {/* <button
-                className={classes.Btn}
-                style={style}
-                type={props.type}
-                id={props.id}
-                disabled="false">{props.btnText}</button> */}
-                <a href={props.href} style={aStyle}>
-                    <Button type={props.type} variant="contained" color="primary" style={{width: props.width, height: props.height, fontSize: props.fontSize}}>{props.btnText}</Button>
-                </a>
+            <a href={props.href} style={aStyle}>
+                <Button
+                    type={props.type}
+                    variant="contained"
+                    color="primary"
+                    style={{ width: props.width, height: props.height, fontSize: props.fontSize }}
+                    onClick={props.onClick}>{props.btnText}</Button>
+            </a>
         </Aux>
     );
 }
