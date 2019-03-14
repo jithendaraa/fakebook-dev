@@ -3,13 +3,10 @@ import React,{ Component } from 'react';
 import classes from './Signin.css';
 
 import Input from '../../UI/Input/Input';
-import ActButton from '../../UI/Button/ActButton';
+// import ActButton from '../../UI/Button/ActButton';
 import Home from '../../Home/Home';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-
-
-
 
 class Signin extends Component {
 
@@ -18,7 +15,7 @@ class Signin extends Component {
     }
 
     inputTouchedHandler = () => {
-        if(this.state.disabled == false){
+        if(this.state.disabled === false){
             let btn = document.getElementById("loginBtn");
             btn.disabled = false;
         }

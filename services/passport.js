@@ -22,15 +22,9 @@ passport.use(
         callbackURL: '/auth/google/callback',
     }, async (accessToken, refreshToken, profile, done) => {
 
-        console.log(profile);
-        console.log(profile.id);
-        console.log(profile.displayName);
-        console.log(profile.emails[0].value);
-        // console.log(profile.gender)
-        console.log("hi");
+
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
-            // console.log(profile);
             return done(null, existingUser);
         }
         else {
@@ -38,7 +32,7 @@ passport.use(
                 googleId: profile.id,
                 email: profile.emails[0].value,
                 displayName: profile.displayName,
-                myFriends: ["Jith", "Ajay"]
+                myFriends: []
             }).save();
             done(null, user);
         }

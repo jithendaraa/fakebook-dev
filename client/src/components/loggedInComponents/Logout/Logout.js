@@ -3,11 +3,6 @@ import Button from '../../UI/Button/Button';
 
 import { connect } from 'react-redux';
 
-const aStyle = {
-    textDecoration: "none",
-    color: "black"
-};
-
 class Logout extends Component {
 
     logout = () => (

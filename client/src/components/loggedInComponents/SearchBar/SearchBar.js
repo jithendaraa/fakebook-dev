@@ -7,7 +7,7 @@ class SearchBar extends Component {
         return (
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around" }}>
                     <div>
-                        <TextBox />
+                        <TextBox changed={this.props.changed} id={this.props.id}/>
                     </div>
                     <div style={{ paddingTop: "15px" }}>
                         <Button btnText="search" type="submit" fontSize="10px" />

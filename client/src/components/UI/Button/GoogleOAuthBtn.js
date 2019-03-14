@@ -44,7 +44,7 @@ const googleOAuthBtn = (props) => {
         <Aux>
             <Button variant="contained" color="white" style={btnStyle}>
                 <a href='/auth/google' style={astyle}>
-                    <img src={Glogo} style={imgStyle} />
+                    <img src={Glogo} alt="img" style={imgStyle} />
                     <p><b style={bstyle}>  Signup with Google</b></p>
                 </a>
             </Button>

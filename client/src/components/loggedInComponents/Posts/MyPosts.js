@@ -1,48 +1,87 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+
 import { connect } from 'react-redux';
-// import * as actions from '../../../actions';
-import { fetchMyPosts } from '../../../actions';
-// import 'materialize-css/dist/css/materialize.min.css';
+
+import * as actions from '../../../actions';
+
 import SimpleCard from '../../../components/UI/Card/SimpleCard';
+import Header from '../Header';
+// import Flip from 'react-reveal/Flip';
+import LightSpeed from 'react-reveal/LightSpeed';
+
+
+
 class MyPosts extends Component {
 
+    userId = () => (this.props.auth._id)
 
+    displayName = () => (this.props.auth.displayName)
+
+    email = () => (this.props.auth.email)
+
+    posts = () => {console.log(this.props.posts)}
+
+    likeClicked(id) {
+        console.log("like Clicked");
+        const userId = this.userId();
+        this.props.postLikeClicked(id, userId);
+        this.posts();
+    }
+
+    dislikeClicked(id){
+        console.log("dislike Clicked");
+        const userId = this.userId();
+        this.props.postDislikeClicked(id, userId);
+        this.posts();
+    }
 
     componentDidMount() {
         this.props.fetchMyPosts();
-        console.log(2);
+        
     }
 
     renderMyPosts = () => {
-        switch (this.props.posts.length) {
-            case 0:
-                return (<div><b>No posts to show</b></div>)
+        switch (this.props.posts) {
+            case null:
+                return (<div><b>...Loading</b></div>)
             default:
-                return this.props.posts.reverse().map(post => {
-                    return (
-                        <div key={post._id}>
-                            <SimpleCard  
-                                postedBy={this.props.auth.displayName}
-                                postedByEmail={this.props.auth.email}
-                                postBody={post.post}
-                                likes={post.likes.length}
-                                dislikes={post.dislikes.length}
-                                comments={post.comments.length}
-                                postedOn={new Date(post.postedOn).toLocaleDateString()}
-                            /><br />
-                            {/* <p>Posted on: {}</p> */}
-                        </div>
-                    )
-                });
+
+                if (this.props.posts.length >= 1) {
+                    return this.props.posts.reverse().map(post => {
+                        return (
+                            <div key={post._id}>
+                            <LightSpeed>
+                                <SimpleCard
+                                    postedBy={this.displayName()}
+                                    postedByEmail={this.email()}
+                                    postBody={post.post}
+                                    likes={post.likes.length}
+                                    dislikes={post.dislikes.length}
+                                    comments={post.comments.length}
+                                    postedOn={new Date(post.postedOn).toLocaleDateString()}
+                                    likeOnClick={() => this.likeClicked(post._id)}
+                                    dislikeOnClick={() => this.dislikeClicked(post._id)}
+                                /><br />
+                            </LightSpeed>
+                               
+                            </div>
+                        )
+                    });
+                }
+                else if (this.props.posts.length === 0){
+                    return (<div>No posts to show</div>);
+                }
+
         }
     }
 
     render() {
         return (
             <div>
-                <h3 style={{paddingLeft: "30px"}}>MyPosts</h3>
-                <div style={{paddingLeft: "30px"}}>
+                <Header />
+
+                <h3 style={{ paddingLeft: "30px" }}>MyPosts</h3>
+                <div style={{ paddingLeft: "30px" }}>
                     {this.renderMyPosts()}
                 </div>
             </div>
@@ -57,4 +96,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchMyPosts })(MyPosts);
+export default connect(mapStateToProps, actions)(MyPosts);
+
+
+
+
+

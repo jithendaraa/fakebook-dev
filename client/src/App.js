@@ -14,12 +14,12 @@ import MyPosts from './components/loggedInComponents/Posts/MyPosts';
 
 // import NavigationItems from './components/Navigation/NavigationItems';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 
-const posts = () => (<div>Posts</div>);
-const newPost = () => (<div>newPost</div>);
+// const posts = () => (<div>Posts</div>);
+// const newPost = () => (<div>newPost</div>);
 
 class App extends Component {
 

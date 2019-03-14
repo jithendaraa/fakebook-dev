@@ -6,7 +6,10 @@ class ProfilePic extends Component {
 
     displayName = () => (<div>{this.props.auth.displayName}</div>);
     email = () => (<div>{this.props.auth.email}</div>);
-
+    componentDidMount(){
+        console.log(this.props.auth.displayName);
+        console.log(this.props.auth.email);
+    }
     render() {
         return (
             <div>

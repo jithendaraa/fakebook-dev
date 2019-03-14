@@ -19,7 +19,7 @@ class Signup extends Component {
     inputChangedHandler = () => {
         let password = document.getElementById("password").value;
         let cPassword = document.getElementById("cPassword").value;
-        if (password == cPassword && this.state.passwordsMatch == false && password.length >= 7 && cPassword.length >= 7) {
+        if (password === cPassword && this.state.passwordsMatch === false && password.length >= 7 && cPassword.length >= 7) {
             this.setState({ passwordsMatch: !this.state.passwordsMatch }, function () {
                 console.log("Passwords Match");
                 let btn = document.getElementById("signupBtn");
@@ -29,7 +29,7 @@ class Signup extends Component {
                 btn.style.transition = "1.5s";
             });
         }
-        else if (password !== cPassword && this.state.passwordsMatch == true) {
+        else if (password !== cPassword && this.state.passwordsMatch === true) {
             this.setState({ passwordsMatch: !this.state.passwordsMatch }, function () {
                 console.log("Passwords don't Match");
                 let btn = document.getElementById("signupBtn");

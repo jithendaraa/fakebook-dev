@@ -7,10 +7,6 @@ import Logout from '../loggedInComponents/Logout/Logout';
 import SearchBar from '../loggedInComponents/SearchBar/SearchBar';
 import Button from '../UI/Button/Button';
 
-let aStyle = {
-    textDecoration: "none"
-};
-
 let logoutStyle = {
     paddingLeft: "15px",
     paddingTop: "10px"

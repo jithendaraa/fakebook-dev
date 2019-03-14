@@ -7,6 +7,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+// import Flip from 'react-reveal/Flip';
+import Zoom from 'react-reveal/Zoom';
+
 const styles = {
   card: {
     minWidth: 200,
@@ -25,6 +28,7 @@ function SimpleCard(props) {
 
   return (
     <Card className={classes.card}>
+      <Zoom>
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           {props.postedOn}
@@ -40,10 +44,11 @@ function SimpleCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Likes({props.likes})</Button>
-        <Button size="small">Dislikes({props.dislikes})</Button>
+        <Button size="small" onClick={props.likeOnClick}>Likes({props.likes})</Button>
+        <Button size="small" onClick={props.dislikeOnClick}>Dislikes({props.dislikes})</Button>
         <Button size="small">Comments({props.comments})</Button>
       </CardActions>
+      </Zoom>
     </Card>
   );
 }

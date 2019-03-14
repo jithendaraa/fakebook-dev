@@ -11,7 +11,7 @@ class Input extends Component {
     }
 
     touched = () => {
-        if(this.state.touched == false){
+        if(this.state.touched === false){
             this.setState({touched: true});
         }
     }
@@ -24,7 +24,7 @@ class Input extends Component {
             backgroundColor: this.props.bgColor
         }
 
-        if(this.props.id == "password" || this.props.id == "cPassword"){
+        if(this.props.id === "password" || this.props.id === "cPassword"){
             if(this.props.pmatch){
                 style = {
                     width: this.props.width,
@@ -34,7 +34,7 @@ class Input extends Component {
                 }
             }
 
-            else if(!this.props.pmatch && this.state.touched == true){
+            else if(!this.props.pmatch && this.state.touched === true){
                 style = {
                     width: this.props.width,
                     height: this.props.height,
