@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-// import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import { TiZoom } from '../../../../node_modules/react-icons/ti/index';
+// import { TiZoom } from "../../../../node_modules/react-icons/ti";
 
 const styles = theme => ({
     container: {
@@ -22,7 +22,7 @@ const styles = theme => ({
 
 });
 
-const lol = (<div><TiZoom></TiZoom>Search for a user</div>);
+// const lol = (<div><TiZoom></TiZoom>Search for a user</div>);
 
 class TextFields extends React.Component {
     state = {
@@ -46,7 +46,7 @@ class TextFields extends React.Component {
                 <TextField
                     onChange={this.props.changed}
                     id={this.props.id}
-                    label={lol}
+                    // label={lol}
                     className={classNames(classes.textField, classes.dense)}
                     margin="dense"
                     placeholder="Type here"

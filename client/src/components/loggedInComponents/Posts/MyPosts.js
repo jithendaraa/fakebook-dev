@@ -6,18 +6,30 @@ import * as actions from '../../../actions';
 
 import SimpleCard from '../../../components/UI/Card/SimpleCard';
 import Header from '../Header';
-// import Flip from 'react-reveal/Flip';
 import LightSpeed from 'react-reveal/LightSpeed';
-
-
+import Spinner from '../../UI/Spinner/Spinner';
 
 class MyPosts extends Component {
 
     userId = () => (this.props.auth._id)
 
-    displayName = () => (this.props.auth.displayName)
+    displayName = () => {
+        if(this.props.auth == null){
+            document.location.reload();
+        }
+        else {
+            return this.props.auth.displayName
+        }
+    }
 
-    email = () => (this.props.auth.email)
+    email = () => {
+        if(this.props.auth == null){
+            document.location.reload();
+        }
+        else {
+            return this.props.auth.email
+        }
+    }
 
     posts = () => {console.log(this.props.posts)}
 
@@ -25,25 +37,22 @@ class MyPosts extends Component {
         console.log("like Clicked");
         const userId = this.userId();
         this.props.postLikeClicked(id, userId);
-        this.posts();
     }
 
     dislikeClicked(id){
         console.log("dislike Clicked");
         const userId = this.userId();
         this.props.postDislikeClicked(id, userId);
-        this.posts();
     }
 
     componentDidMount() {
         this.props.fetchMyPosts();
-        
     }
 
     renderMyPosts = () => {
         switch (this.props.posts) {
             case null:
-                return (<div><b>...Loading</b></div>)
+                return (<div><Spinner /></div>)
             default:
 
                 if (this.props.posts.length >= 1) {

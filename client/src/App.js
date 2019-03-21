@@ -12,14 +12,11 @@ import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
 import Home from './components/Home/Home';
 import MyPosts from './components/loggedInComponents/Posts/MyPosts';
 
-// import NavigationItems from './components/Navigation/NavigationItems';
 
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 
-// const posts = () => (<div>Posts</div>);
-// const newPost = () => (<div>newPost</div>);
 
 class App extends Component {
 
@@ -31,11 +28,10 @@ class App extends Component {
     return (
       <div>
         <Route path="/" exact component={Home}></Route>
+        {/* <Route path="/chat" exact component={Home}></Route> */}
         <Route path="/newPost" exact component={NewPost}></Route>
-        {/* <Route path="/posts" exact component={posts}></Route> */}
         <Route path="/signup" component={Signup}></Route>
         <Route path="/signin" component={Signin}></Route>
-        {/* <Route path="/newPost" component={NewPost}></Route> */}
         <Route path="/myPosts" exact component={MyPosts}></Route>
         <Route path="/newStory" component={NewStory}></Route>
         <Route path="/addFrnd" component={AddFrnd}></Route>

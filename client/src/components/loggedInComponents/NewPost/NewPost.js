@@ -5,13 +5,16 @@ import classes from './NewPost.css';
 import TextArea from '../../UI/TextArea/TextArea';
 import Button from '../../UI/Button/Button';
 import * as actions from '../../../actions';
-// import axios from 'axios';
+import axios from 'axios';
 
 import { connect } from 'react-redux';
 
 class NewPost extends Component {
 
     async submitPost() {
+        const post = document.getElementById("newPostInput").value;
+        const httpPostReq = await axios.post('/api/posts', {post});
+        console.log(httpPostReq);
         window.location.href = "/";
     }
 

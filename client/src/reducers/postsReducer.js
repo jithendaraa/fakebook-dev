@@ -14,6 +14,8 @@ export default function (state = null, actions) {
         case action.FETCH_USERS:
             return actions.payload;
 
+       
+
         default:
             return state;
     }

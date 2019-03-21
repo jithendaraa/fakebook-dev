@@ -32,7 +32,8 @@ passport.use(
                 googleId: profile.id,
                 email: profile.emails[0].value,
                 displayName: profile.displayName,
-                myFriends: []
+                myFriends: [],
+                friendReq: []
             }).save();
             done(null, user);
         }

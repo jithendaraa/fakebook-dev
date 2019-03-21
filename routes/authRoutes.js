@@ -2,9 +2,9 @@ const passport = require('passport');
 
 module.exports = (app) => {
 
-    app.get('/', (req, res) => {
-        res.send("localhost:5000");
-    });
+    // app.get('/', (req, res) => {
+    //     res.send("localhost:5000 is running");
+    // });
 
     app.get('/auth/google', passport.authenticate("google", {
         scope: ['profile', 'email']

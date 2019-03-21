@@ -35,14 +35,14 @@ class Header extends Component {
                         <h3><a href='/' style={{ cursor: "pointer", textDecoration:"none", color: "black"}}>Fakebook</a></h3>
                     </div>
                 </div>
-                <div>
+                {/* <div>
                     <div className={classes.SubHeader}>
                         <div><SearchBar /></div>
                     </div>
-                </div>
+                </div> */}
                 <div>
                     <div className={classes.SubHeader}>
-                        <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div>
+                        {/* <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div> */}
                         <div style={d2Style}><Button btnText="+ New Post" href="/newPost"></Button></div>
                         <div style={d2Style}><Button btnText="My Posts" href="/myPosts"></Button></div>
                         <div style={d3Style}><Button btnText="+ Add Friend" href="/addfrnd"></Button></div>

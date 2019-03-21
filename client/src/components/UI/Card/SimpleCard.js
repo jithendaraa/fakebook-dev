@@ -44,7 +44,7 @@ function SimpleCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={props.likeOnClick}>Likes({props.likes})</Button>
+        <Button size="small" onClick={props.likeOnClick} hide={props.hide}>Likes({props.likes})</Button>
         <Button size="small" onClick={props.dislikeOnClick}>Dislikes({props.dislikes})</Button>
         <Button size="small">Comments({props.comments})</Button>
       </CardActions>

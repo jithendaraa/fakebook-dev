@@ -21,7 +21,7 @@ const guestHome = (
                 <h5>This is the Homepage of the Guest!</h5>
                 <p>
                     This is a project which took its inspiration from Facebook.<br />
-                    This is a fake facebook ripoff using React/Redux/express/Node/passport with MongoDB(backend).<br />
+                    This is a fake facebook ripoff using React/Redux/express/Node/passport with MongoDB.<br />
                     Date of start: 7th March 2019
                 </p>
                 <p>You are currently a guest and not logged in!</p>
