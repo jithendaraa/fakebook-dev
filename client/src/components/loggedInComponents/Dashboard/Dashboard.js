@@ -12,77 +12,90 @@ import MyFriends from '../../UI/MyFriends/MyFriends';
 import classes from './Dashboard.css';
 import Spinner from '../../UI/Spinner/Spinner';
 
-class Dashboard extends Component {
 
-    frndReqNotif = () => {
-        axios.get('/api/frndReqNotifs', {
-            params: {
-                currentUser: this.props.auth._id
-            }
-        })
-    }
+// import io from 'socket.io-client';
+// let id;
+
+// const socketUrl = io('http://localhost:5000');
+
+// const socket = io(socketUrl);
+
+// socket.on('connect', () => {
+//     console.log("Connected");
+// });
+
+class Dashboard extends Component {
 
     userId = () => (this.props.auth._id)
 
-    likeClicked(id) {
+    likeClicked = async(id) => {
         const userId = this.userId();
-        console.log("like Clicked by " + userId);
-
-        this.props.postLikeClicked(id, userId);
+        await this.props.dbpostLikeClicked(id, userId);
     }
 
-    dislikeClicked(id) {
-        console.log("dislike Clicked");
+    dislikeClicked = async(id) => {
         const userId = this.userId();
-        // this.props.postDislikeClicked(id, userId);
+        await this.props.dbpostDislikeClicked(id, userId);
     }
 
     getPosts = async () => {
-        const getDashboardPosts = await this.props.fetchDashboardPosts(this.props.auth._id);
+        console.log(this.props.auth._id);
+        await this.props.fetchDashboardPosts(this.props.auth._id);
         console.log(this.props.dashboardPosts);
     }
 
     fetchUserFromId = async (id) => {
         const fetch = await axios.get('/api/getUserFromId', { params: { id: id } });
-        console.log(id);
+        console.log(id, fetch);
     }
 
     async componentDidMount() {
-        this.getPosts();
+        await this.getPosts();
     }
 
-    renderPosts() {
-        if (this.props.dashboardPosts == undefined) {
-            return (<div style={{ paddingLeft: "30px" }}><Spinner /></div>)
-        }
-        else if (this.props.dashboardPosts == null || this.props.dashboardPosts == [] || this.props.dashboardPosts._doc == undefined) {
-            console.log(this.props.dashboardPosts);
-            return (<div style={{ paddingLeft: "30px" }}>No posts to display</div>)
-        }
-        else if (this.props.dashboardPosts.length >= 1) {
-            return this.props.dashboardPosts.map(dashboardPost => {
-                return (
-                    <div key={dashboardPost._doc._id} style={{ paddingTop: "10px", paddingLeft: "30px" }}>
-                        <SimpleCard
-                            postedOn={new Date(dashboardPost._doc.postedOn).toLocaleDateString()}
-                            postedBy={dashboardPost.displayName}
-                            postedByEmail={dashboardPost.email}
-                            postBody={dashboardPost._doc.post}
-                            likes={dashboardPost._doc.likes.length}
-                            dislikes={dashboardPost._doc.dislikes.length}
-                            comments={dashboardPost._doc.comments.length}
-                            likeOnClick={() => this.likeClicked(dashboardPost._doc._id)}
-                            dislikeOnClick={() => this.dislikeClicked(dashboardPost._doc._id)}
-                        />
-                    </div>
-                )
-            })
-        }
+    renderPosts = () => {
+        return (
+            <div>
+                {
+                    this.props.dashboardPosts.reverse().map(dashboardPost => {
+                        console.log(dashboardPost)
+                        return (
+                            <div key={dashboardPost.post._id} style={{ paddingTop: "10px", paddingLeft: "30px" }}>
+                                <SimpleCard
+                                    postedOn={new Date(dashboardPost.post.postedOn).toLocaleDateString()}
+                                    postTime={new Date(dashboardPost.post.postedOn).toLocaleTimeString()}
+                                    postedBy={dashboardPost.user.displayName}
+                                    postedByEmail={dashboardPost.user.email}
+                                    postBody={dashboardPost.post.post}
+                                    likes={dashboardPost.post.likes.length}
+                                    dislikes={dashboardPost.post.dislikes.length}
+                                    comments={dashboardPost.post.comments.length}
+                                    likeOnClick={() => this.likeClicked(dashboardPost.post._id)}
+                                    dislikeOnClick={() => this.dislikeClicked(dashboardPost.post._id)}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
     }
 
-    renderChat(){
-        console.log("RENDER TIME")
+    checkDashboard(){
+       if(this.props.dashboardPosts){
+           if(this.props.dashboardPosts.length === 0){
+               return (<div>No posts to display</div>)
+           }
+           else if(this.props.dashboardPosts.length >= 1){
+               return this.renderPosts();
+           }
+       }
+       else{
+           return (<Spinner />)
+       }
     }
+
+
 
     render() {
         return (
@@ -91,19 +104,22 @@ class Dashboard extends Component {
                     <div>
                         <FrndReqNotifPopper />
                     </div>
-                    <div style={{paddingLeft: "10px"}}>
+                    <div style={{ paddingLeft: "10px" }}>
                         <MyFriends />
                     </div>
-                    
+
                 </div>
-                <div style={{paddingLeft: "30px"}}>
+                <div style={{ paddingLeft: "30px" }}>
                     <ProfilePic />
                     <h4>Dashboard</h4>
+                    
+                    {/* <div> */}
+                        {this.checkDashboard()}
+                    {/* </div> */}
                 </div>
-                
-                {this.renderPosts()}
 
-                {this.renderChat()}
+
+
             </div>
         );
     }

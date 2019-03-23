@@ -10,17 +10,20 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
 
+
+
 const styles = theme => ({
   typography: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
 });
 
 class MyFriends extends React.Component {
   state = {
     anchorEl: null,
-    open: false,
+    open: false
   };
+
 
   handleClick = event => {
     const { currentTarget } = event;
@@ -28,18 +31,20 @@ class MyFriends extends React.Component {
       anchorEl: currentTarget,
       open: !state.open,
     }));
+    return;
   };
 
-  componentDidMount = async() => {
-    const getMyFriends = await this.props.getMyFriends(this.props.auth.myFriends);
+  async componentDidMount(){
+    await this.props.getMyFriends(this.props.auth.myFriends);
+    return;
   }
 
   renderFriends() {
     const { classes } = this.props;
-    if(this.props.myFriends.length == 0){
+    if(this.props.myFriends.length === 0){
         return (<div>No friends</div>);
     }
-    else if(this.props.myFriends == undefined){
+    else if(this.props.myFriends === undefined){
       return (<div>...Loading</div>)
     }
     else if(this.props.myFriends.length >= 1){
@@ -57,7 +62,7 @@ class MyFriends extends React.Component {
 }
 
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     const { anchorEl, open } = this.state;
     const id = open ? 'simple-popper' : null;
 

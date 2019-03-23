@@ -11,7 +11,7 @@ import NewStory from './components/loggedInComponents/NewStory/NewStory';
 import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
 import Home from './components/Home/Home';
 import MyPosts from './components/loggedInComponents/Posts/MyPosts';
-
+import Chat from './components/loggedInComponents/Chat/Chat';
 
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ class App extends Component {
     return (
       <div>
         <Route path="/" exact component={Home}></Route>
-        {/* <Route path="/chat" exact component={Home}></Route> */}
+        <Route path="/chat" exact component={Chat}></Route>
         <Route path="/newPost" exact component={NewPost}></Route>
         <Route path="/signup" component={Signup}></Route>
         <Route path="/signin" component={Signin}></Route>

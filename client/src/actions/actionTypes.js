@@ -6,7 +6,7 @@ export const POST_LIKE_CLICKED = 'post_like_clicked';
 export const POST_DISLIKE_CLICKED = 'post_dislike_clicked';
 
 export const DB_POST_LIKE_CLICKED = 'dbpost_like_clicked';
-// export const DBPOST_DISLIKE_CLICKED = 'dbpost_dislike_clicked';
+export const DB_POST_DISLIKE_CLICKED = 'dbpost_dislike_clicked';
 
 export const FETCH_USERS = 'fetch_users';
 

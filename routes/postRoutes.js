@@ -129,36 +129,55 @@ module.exports = app => {
 
      app.get('/api/dashboardPosts', async (req,res) => {
           
-          const currentUser = await User.findOne({ _id: req.query.currentUser});
-          const friends = currentUser.myFriends;
-          let i;
-
-          let dashboardIds = friends.concat(currentUser._id);
-
-          let posts, post, user;
-          posts = [];
+          let posts, post, user, i, reqdPost, j, parsedTimeStamp, date, time, timeStamp;
+          const currentUser = await User.findOne({ _id: req.query.currentUser});               //contains details of current active user
+          const friends = currentUser.myFriends;                                               //contains all friends of current user
           
-          if(dashboardIds.length !== 0){
-               for(i=0; i<dashboardIds.length; i++){
-                    post = await Post.findOne({ _user: dashboardIds[i] });
-                    user = await User.findOne({ _id: dashboardIds[i] });
-                    if(post == null){
-                         post = {};
+          let reqdPosts = [];
+          let dashboardIds = friends.concat(currentUser._id);                                  //contains ids of currentUser + all his friends  
+          
+          posts = await Post.find({});
+
+          for(i=0; i<dashboardIds.length; i++){
+
+               user = await User.findOne({ _id: dashboardIds[i] });
+               
+               for(j=0; j<posts.length; j++){
+                    if(posts[j]._user.toString() == user._id.toString()){
+                         date = new Date(posts[j].postedOn).toLocaleDateString();
+                         time = new Date(posts[j].postedOn).toLocaleTimeString();
+                         timeStamp = date + " " + time;
+                         parsedTimeStamp = Date.parse(timeStamp);
+                         reqdPost = {
+                              user: user,
+                              post: posts[j],
+                              parsedTimeStamp: parsedTimeStamp
+                         };
+                         reqdPosts.push(reqdPost)
                     }
-                    // post.displayName = "lmao";
-                    
-                    post = {
-                         ...post,
-                         displayName: user.displayName,
-                         email: user.email
-                    };
-                    // console.log(post);
-                    // console.log(post.displayName);
-                    posts.push(post);
-                    
                }
-               // console.log(posts);
           }
-          res.send(posts);
+
+          function swapArrayOfObjects(arr, posA, posB){
+               let temp;
+               temp = arr[posA];
+               arr[posA] = arr[posB];
+               arr[posB] = temp;
+          }
+
+          if(reqdPosts.length > 0){
+               let temp, primaryTS, secondaryTS;
+               for(i=0; i<reqdPosts.length - 1; i++){
+                    for(j=i+1; j<reqdPosts.length; j++){
+                         primaryTS = reqdPosts[i].parsedTimeStamp;
+                         secondaryTS = reqdPosts[j].parsedTimeStamp;
+                         if(secondaryTS > primaryTS){
+                              swapArrayOfObjects(reqdPosts, i, j);
+                         }
+                    }
+               }
+          }    
+
+          res.send(reqdPosts.reverse());
      });
 };

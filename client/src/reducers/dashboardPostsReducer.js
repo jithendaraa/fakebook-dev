@@ -7,8 +7,8 @@ export default function (state = null, actions) {
             return actions.payload;
         case action.DB_POST_LIKE_CLICKED:
             return actions.payload;
-        // case action.DBPOST_DISLIKE_CLICKED:
-        //     return actions.payload;
+        case action.DB_POST_DISLIKE_CLICKED:
+            return actions.payload;
         default:
             return state;
     }

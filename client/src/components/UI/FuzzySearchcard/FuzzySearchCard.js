@@ -9,8 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
 
-import axios from 'axios';
-
 import Zoom from 'react-reveal/Zoom';
 
 const styles = {
@@ -55,7 +53,7 @@ function SimpleCard(props) {
         </CardContent>
         <CardActions>
           {/* <Button id={props.id}>Fraaands</Button> */}
-          {props.frndStatusBool == 1 ? <Button size="small">{props.frndStatus}</Button> : <Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>}
+          {props.frndStatusBool === 1 ? <Button size="small">{props.frndStatus}</Button> : <Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>}
 
           {/* <Button size="small"></Button> */}
 

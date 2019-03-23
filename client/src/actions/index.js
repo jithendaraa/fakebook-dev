@@ -14,6 +14,8 @@ export const fetchMyPosts = () => async dispatch => {
     dispatch({ type: actions.FETCH_MYPOSTS, payload: res.data });                             //res.data has our data as an array containing my post details
 };
 
+
+
 export const postLikeClicked = (postId, userId) => async dispatch => {
 
     const req = {
@@ -21,10 +23,12 @@ export const postLikeClicked = (postId, userId) => async dispatch => {
         userId: userId,
         upvote: 1
     };
-    const postReq = await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
+    await axios.post('/api/postreact', req); //post react refers to liking, disliking or commenting on a post
     const getPost = await axios.get('/api/myposts');
     dispatch({ type: actions.POST_LIKE_CLICKED, payload: getPost.data });
 }
+
+
 
 export const dbpostLikeClicked = (postId, userId) => async dispatch => {
 
@@ -34,9 +38,12 @@ export const dbpostLikeClicked = (postId, userId) => async dispatch => {
         upvote: 1
     };
     const postReq = await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
-    const getPost = await axios.get('/api/dashboardPosts');
+    console.log(postReq);
+    const getPost = await axios.get('/api/dashboardPosts', { params: { currentUser: userId } });
     dispatch({ type: actions.DB_POST_LIKE_CLICKED, payload: getPost.data });
 }
+
+
 
 export const postDislikeClicked = (postId, userId) => async dispatch => {
 
@@ -46,9 +53,26 @@ export const postDislikeClicked = (postId, userId) => async dispatch => {
         upvote: -1
     };
     const postReq = await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
+    console.log(postReq);
     const getPost = await axios.get('/api/myposts');
     dispatch({ type: actions.POST_DISLIKE_CLICKED, payload: getPost.data });
 }
+
+
+
+export const dbpostDislikeClicked = (postId, userId) => async dispatch => {
+
+    const req = {
+        postId: postId,
+        userId: userId,
+        upvote: -1
+    };
+    const postReq = await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
+    console.log(postReq);
+    const getPost = await axios.get('/api/dashboardPosts', { params: { currentUser: userId } });
+    dispatch({ type: actions.DB_POST_DISLIKE_CLICKED, payload: getPost.data });
+}
+
 
 
 
@@ -61,12 +85,16 @@ export const fetchUsers = (startName) => async dispatch => {
     dispatch({ type: actions.FETCH_USERS, payload: getUsers.data });
 }
 
+
+
+
 export const sendFrndReq = (startName, currentUser, searchResult) => async dispatch => {
 
     const postFrndReq = await axios.post('/api/friendReq', {
         from: currentUser._id,
         to: searchResult
     });
+    console.log(postFrndReq);
     const getFrndReq = await axios.get('/api/users',
         {
             params: { startName: startName }
@@ -74,11 +102,17 @@ export const sendFrndReq = (startName, currentUser, searchResult) => async dispa
     dispatch({ type: actions.SEND_FRND_REQ, payload: getFrndReq.data })
 }
 
+
+
+
 export const getFrndReq = (currentUser) => async dispatch => {
 
     const getReq = await axios.get('/api/frndReq', { params: { currentUser: currentUser } });
     dispatch({ type: actions.FETCH_FRND_REQ, payload: getReq.data });
 }
+
+
+
 
 export const frndAccept = (currentUser, friend) => async dispatch => {
 
@@ -86,9 +120,13 @@ export const frndAccept = (currentUser, friend) => async dispatch => {
         currentUser: currentUser,
         friend: friend
     });
+    console.log(postAddFrnd)
     const getReq = await axios.get('/api/frndReq', { params: { currentUser: currentUser } });
     dispatch({ type: actions.FRND_ACCEPT, payload: getReq.data });
 }
+
+
+
 
 export const frndDecline = (currentUser, friend) => async dispatch => {
 
@@ -96,9 +134,12 @@ export const frndDecline = (currentUser, friend) => async dispatch => {
         currentUser: currentUser,
         friend: friend
     });
+    console.log(postDeclineFrnd)
     const getReq = await axios.get('/api/frndReq', { params: { currentUser: currentUser } });
     dispatch({ type: actions.FRND_DECLINE, payload: getReq.data });
 }
+
+
 
 export const fetchDashboardPosts = (currentUser) => async dispatch => {
 
@@ -106,11 +147,16 @@ export const fetchDashboardPosts = (currentUser) => async dispatch => {
     dispatch({ type: actions.FETCH_DASHBOARD_POSTS, payload: getDashboardPosts.data });
 }
 
+
+
+
 export const getMyFriends = (friendIds) => async dispatch => {
-    
-    const myFriends = await axios.get('/api/myFriends', { params: {
-        friendIds: friendIds
-    }});
+
+    const myFriends = await axios.get('/api/myFriends', {
+        params: {
+            friendIds: friendIds
+        }
+    });
     dispatch({ type: actions.GET_MY_FRIENDS, payload: myFriends.data })
 }
 

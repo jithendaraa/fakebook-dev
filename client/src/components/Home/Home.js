@@ -7,6 +7,8 @@ import NavigationItems from '../Navigation/NavigationItems';
 import Header from '../loggedInComponents/Header';
 import Dashboard from '../loggedInComponents/Dashboard/Dashboard';
 
+
+
 const guestHome = (
     <div className={classes.guestHome}>
         <div className={classes.navbar}>
@@ -32,9 +34,12 @@ const guestHome = (
 );
 
 
+
 class Home extends Component {
 
     renderContent() {
+        
+
         switch (this.props.auth) {
             case null:
                 return;

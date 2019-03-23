@@ -8,11 +8,11 @@ import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-import Axios from 'axios';
+
 
 const styles = theme => ({
   typography: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
 });
 
@@ -31,26 +31,21 @@ class SimplePopper extends React.Component {
   };
 
   componentDidMount = async() => {
- 
-    const getReq = await this.props.getFrndReq(this.props.auth._id)
-    // console.log(this.props.frndReq);
-  // console.log(67)
+    await this.props.getFrndReq(this.props.auth._id)
   }
 
   
 
   frndReqResponse = async (friend, response) => {
-    
     console.log(response);
-    if(response == 1)
+    if(response === 1)
     {
-      const frndAccept = await this.props.frndAccept(this.props.auth._id, friend);
+      await this.props.frndAccept(this.props.auth._id, friend);
+      
     }
-    else if(response == 0){
-      const frndDecline = await this.props.frndDecline(this.props.auth._id, friend);
+    else if(response === 0){
+      await this.props.frndDecline(this.props.auth._id, friend);
     }
-    
-    // const getReq = await this.props.getFrndReq( this.props.auth._id );
   }
 
   

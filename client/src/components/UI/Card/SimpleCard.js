@@ -21,6 +21,12 @@ const styles = {
   pos: {
     marginBottom: 12,
   },
+  det: {
+    display: "flex",
+    flexWrap: "wrap",
+    fontSize: 14,
+    justifyContent: "space-between",
+  }
 };
 
 function SimpleCard(props) {
@@ -30,9 +36,15 @@ function SimpleCard(props) {
     <Card className={classes.card}>
       <Zoom>
       <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          {props.postedOn}
-        </Typography>
+        <div className={classes.det}>
+              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                {props.postedOn}
+              </Typography>
+              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                {props.postTime}
+              </Typography>
+        </div>
+        
         <Typography variant="h5" component="h4">
           {props.postedBy}
         </Typography>

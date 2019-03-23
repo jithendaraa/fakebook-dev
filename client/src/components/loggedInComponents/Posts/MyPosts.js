@@ -68,6 +68,7 @@ class MyPosts extends Component {
                                     dislikes={post.dislikes.length}
                                     comments={post.comments.length}
                                     postedOn={new Date(post.postedOn).toLocaleDateString()}
+                                    postTime={new Date(post.postedOn).toLocaleTimeString()}
                                     likeOnClick={() => this.likeClicked(post._id)}
                                     dislikeOnClick={() => this.dislikeClicked(post._id)}
                                 /><br />

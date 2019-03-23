@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import classes from './Header.css';
 
 import Logout from '../loggedInComponents/Logout/Logout';
-import SearchBar from '../loggedInComponents/SearchBar/SearchBar';
+
 import Button from '../UI/Button/Button';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+
 
 let logoutStyle = {
     paddingLeft: "15px",
@@ -26,7 +29,10 @@ let d3Style = {
     paddingTop: "10px"
 };
 
+
+
 class Header extends Component {
+
     render() {
         return (
             <div id="Header" className={classes.Header}>
@@ -42,8 +48,9 @@ class Header extends Component {
                 </div> */}
                 <div>
                     <div className={classes.SubHeader}>
-                        {/* <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div> */}
+                        <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div>
                         <div style={d2Style}><Button btnText="+ New Post" href="/newPost"></Button></div>
+                        <div style={d2Style}><Button btnText="Chat" href="/chat"></Button></div>
                         <div style={d2Style}><Button btnText="My Posts" href="/myPosts"></Button></div>
                         <div style={d3Style}><Button btnText="+ Add Friend" href="/addfrnd"></Button></div>
                         <div style={logoutStyle}><Logout /></div>
@@ -54,4 +61,8 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return{ auth: state.auth }
+}
+
+export default connect(mapStateToProps, actions)(Header);
