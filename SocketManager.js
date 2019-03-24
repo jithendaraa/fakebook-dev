@@ -7,7 +7,5 @@ const sourceFile = require('./server.js');
 
 module.exports = function(socket){
     console.log("Socket ID: " + socket.id);
-
-    
 }
 

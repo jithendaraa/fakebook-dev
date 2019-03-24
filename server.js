@@ -6,6 +6,9 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketio = require('socket.io');
+const multer = require('multer');
+const upload = multer({ dest: 'public/uploads/' });
+
 
 //Models and Services
 require('./models/User');
@@ -33,9 +36,41 @@ app.use(passport.session());
 
 let server = http.Server(app)
 let io = module.exports.io = socketio(server);
-const SocketManager = require('./SocketManager');
+// const SocketManager = require('./SocketManager');
 
-io.on('connection', SocketManager);
+
+let users = {
+  online: []
+};
+
+io.on('connection', (socket) => {
+  console.log("Socket ID: " + socket.id);
+
+  // socket.on("online", (id) => {
+  //   console.log(id);
+  //   if (!users.online.includes(id)) {
+  //     users.online.push(id);
+  //   }
+  //     // socket.emit('online users', users.online);
+  //   console.log(users.online);
+  // });
+
+  // socket.on("offline", (id) => {
+  //   // if (users.online.includes(id)) {
+  //   //   users.online.filter(e => e !== id)
+  //   // }
+  //   console.log(id)
+  //   let pos = users.online.indexOf(id);
+  //   if(pos != -1){
+  //     users.online.splice(pos, 1);
+  //   }
+  //   // socket.emit('online users', users.online);
+  //   console.log(users.online);
+  // });
+});
+
+  
+// });
 
 
 server.listen(PORT, () => {
@@ -45,9 +80,11 @@ server.listen(PORT, () => {
 //Route Handlers
 // require('./routes/authRoutes')(app);
 
-let users = {
-  online: []
-};
+
+                                                                            //Image Upload Route
+
+
+                                                                            //Auth Routes start
 
 app.get('/auth/google', passport.authenticate("google", {
   scope: ['profile', 'email']
@@ -56,61 +93,61 @@ app.get('/auth/google', passport.authenticate("google", {
 
 
 app.get(
-  '/auth/google/callback', 
+  '/auth/google/callback',
   passport.authenticate('google'),
   (req, res) => {
     
-      if(users.online.length == 0){
-          users.online.push(req.user._id);
-
-      }
-      else if(users.online.length >= 1){
-          if(users.online.includes(req.user._id)){
-            console.log("This id is already active");
-          }
-          else{
-            users.online.push(req.user._id);
-          }
-      }
-      let id = req.user._id;
-     
-      
-      console.log("Logged in Users: " + users.loggedIn)
-      console.log(users.online);
-
-      res.redirect('/')
+    let id = req.user._id;
+    if (!users.online.includes(id)) {
+      users.online.push(id);
+      console.log(users.online)
+    }
+    
+    res.redirect('/')
   }
 );
 
+app.post('/api/uploadPic', (req, res) => {
+
+  console.log(req.body)
+  res.send(req.body);
+
+});
+
 app.get('/api/logout', (req, res) => {
   console.log("logged out: " + req.user.id);
-  
-  users.online.splice(req.user._id, 1);
+ 
+  let pos = users.online.toString().indexOf(req.user.id);
+  if(pos != -1){
+    users.online.splice(pos, 1);
+  }
   console.log(users.online)
-  
+  console.log("sa")
   req.logout();
   res.redirect('/');
-  
+
 });
 
 app.get('/api/current_user', (req, res) => {
   res.send(req.user);
 });
 
+                                                                            //Auth Routes end
+
 
 module.exports = {
-      users
+  users
 }
 
 
 require('./routes/postRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/frndRoutes')(app);
+require('./routes/imgRoutes')(app);
 
 
 
-
-
+///////////logout problemsss
 
 
 

@@ -10,7 +10,7 @@ class ProfilePic extends Component {
     render() {
         return (
             <div>
-                <div>Display users profile picture here maybe? [last priority]</div>
+                <div><a href="/uploadPic">Display users profile picture here maybe? [last priority]</a></div>
                 {this.displayName()}
                 {this.email()}
             </div>

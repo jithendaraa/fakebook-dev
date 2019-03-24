@@ -8,6 +8,11 @@ import Logout from '../loggedInComponents/Logout/Logout';
 import Button from '../UI/Button/Button';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+// import { func } from 'prop-types';
+
+// import io from 'socket.io-client';
+// const socketUrl = io('http://localhost:5000');
+// const socket = io(socketUrl);
 
 
 let logoutStyle = {
@@ -31,6 +36,8 @@ let d3Style = {
 
 
 
+
+
 class Header extends Component {
 
     render() {
@@ -41,11 +48,6 @@ class Header extends Component {
                         <h3><a href='/' style={{ cursor: "pointer", textDecoration:"none", color: "black"}}>Fakebook</a></h3>
                     </div>
                 </div>
-                {/* <div>
-                    <div className={classes.SubHeader}>
-                        <div><SearchBar /></div>
-                    </div>
-                </div> */}
                 <div>
                     <div className={classes.SubHeader}>
                         <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div>

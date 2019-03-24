@@ -58,7 +58,7 @@ function SimpleCard(props) {
       <CardActions>
         <Button size="small" onClick={props.likeOnClick} hide={props.hide}>Likes({props.likes})</Button>
         <Button size="small" onClick={props.dislikeOnClick}>Dislikes({props.dislikes})</Button>
-        <Button size="small">Comments({props.comments})</Button>
+        <Button size="small" onClick={props.show}>Comments({props.comments})</Button>
       </CardActions>
       </Zoom>
     </Card>

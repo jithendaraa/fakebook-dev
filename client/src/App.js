@@ -16,6 +16,7 @@ import Chat from './components/loggedInComponents/Chat/Chat';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
+import DpUpload from './components/loggedInComponents/DpUpload/DpUpload';
 
 
 class App extends Component {
@@ -28,6 +29,7 @@ class App extends Component {
     return (
       <div>
         <Route path="/" exact component={Home}></Route>
+        <Route path="/uploadPic" exact component={DpUpload}></Route>
         <Route path="/chat" exact component={Chat}></Route>
         <Route path="/newPost" exact component={NewPost}></Route>
         <Route path="/signup" component={Signup}></Route>

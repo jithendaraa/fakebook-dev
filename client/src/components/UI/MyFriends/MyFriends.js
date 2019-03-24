@@ -9,7 +9,19 @@ import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
+import Spinner from '../Spinner/Spinner';
 
+// import io from 'socket.io-client';
+
+
+// const socketUrl = io('http://localhost:5000');
+// let onlineUsers;
+// const socket = io(socketUrl);
+
+// socket.on('online users', (onlineUsers) => {
+//   // console.log(onlineUsers);
+//   console.log(onlineUsers)
+// })
 
 
 const styles = theme => ({
@@ -21,8 +33,11 @@ const styles = theme => ({
 class MyFriends extends React.Component {
   state = {
     anchorEl: null,
-    open: false
+    open: false,
+    online: []
   };
+
+
 
 
   handleClick = event => {
@@ -45,19 +60,19 @@ class MyFriends extends React.Component {
         return (<div>No friends</div>);
     }
     else if(this.props.myFriends === undefined){
-      return (<div>...Loading</div>)
+      return (<Spinner />)
     }
     else if(this.props.myFriends.length >= 1){
         return this.props.myFriends.map(myFriend => {
             return (
                 <div key={myFriend._id}>
-                    <Typography className={classes.typography}>{myFriend.displayName} <b>{myFriend.email}</b></Typography>
+                    <Typography className={classes.typography}>{myFriend.displayName} <b>{myFriend.email}</b> </Typography>
                 </div>
             )
         })
     }
     else{
-        return <div>...Loading</div>
+        return (<Spinner />)
     }
 }
 
@@ -75,23 +90,7 @@ class MyFriends extends React.Component {
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
               <Paper>
-                {/* <Typography className={classes.typography}>dsf</Typography> */}
-                {this.renderFriends()}
-                
-                {/* {this.props.frndReq.length !== 0 ? this.props.frndReq.map(friend => {
-                  return (
-                      <div key={friend._id}>
-                         <Typography className={classes.typography}>{friend.displayName} </Typography>
-                         <Typography className={classes.typography}>{friend.email} </Typography>
-                         <Button className={classes.typography} onClick={() => this.frndReqResponse(friend, 1)}>Accept</Button>
-                         <Button className={classes.typography} onClick={() => this.frndReqResponse(friend, 0)}>Decline</Button>
-                      </div>
-                  );
-                }) : <Typography className={classes.typography}>No requests </Typography>}
-                 */}
-                
-                
-                
+                {this.renderFriends()} 
               </Paper>
             </Fade>
           )}

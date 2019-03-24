@@ -13,16 +13,37 @@ import classes from './Dashboard.css';
 import Spinner from '../../UI/Spinner/Spinner';
 
 
-// import io from 'socket.io-client';
-// let id;
+import io from 'socket.io-client';
 
-// const socketUrl = io('http://localhost:5000');
 
-// const socket = io(socketUrl);
+const socketUrl = io('http://localhost:5000');
+let id;
+const socket = io(socketUrl);
 
-// socket.on('connect', () => {
-//     console.log("Connected");
-// });
+socket.on('connect', () => {
+    console.log("Connected");
+});
+
+// socket.on('loggedIn', (id) => {
+//     // console.log(user)
+//     console.log(id)
+// } )
+
+// window.addEventListener('offline', offline);
+// window.addEventListener('online', online);
+
+// function online(e){
+//     console.log(e.type);
+//     if( id == null ){
+
+//     }
+//     socket.emit('online', id);
+// }
+
+// function offline(e){
+//     console.log(e.type);
+//     socket.emit('offline', id);
+// }
 
 class Dashboard extends Component {
 
@@ -39,9 +60,7 @@ class Dashboard extends Component {
     }
 
     getPosts = async () => {
-        console.log(this.props.auth._id);
         await this.props.fetchDashboardPosts(this.props.auth._id);
-        console.log(this.props.dashboardPosts);
     }
 
     fetchUserFromId = async (id) => {
@@ -50,7 +69,12 @@ class Dashboard extends Component {
     }
 
     async componentDidMount() {
+        // id = this.userId();
         await this.getPosts();
+    }
+
+    commmentsOnClick = (id) => {
+        console.log("Comment of post " + id + " clicked")
     }
 
     renderPosts = () => {
@@ -58,7 +82,7 @@ class Dashboard extends Component {
             <div>
                 {
                     this.props.dashboardPosts.reverse().map(dashboardPost => {
-                        console.log(dashboardPost)
+                        
                         return (
                             <div key={dashboardPost.post._id} style={{ paddingTop: "10px", paddingLeft: "30px" }}>
                                 <SimpleCard
@@ -72,6 +96,7 @@ class Dashboard extends Component {
                                     comments={dashboardPost.post.comments.length}
                                     likeOnClick={() => this.likeClicked(dashboardPost.post._id)}
                                     dislikeOnClick={() => this.dislikeClicked(dashboardPost.post._id)}
+                                    commentsOnClick={() => this.commentsClicked(dashboardPost.post._id)}
                                 />
                             </div>
                         )

@@ -55,10 +55,19 @@ module.exports = app => {
         let users = [];
         let user;
         let i;
-        for(i=0; i<friendIds.length; i++){
-            user = await User.findOne({ _id: friendIds[i] });
-            users.push(user);
+        if(friendIds == undefined){
+            friendIds = [];
         }
+        if(friendIds.length != 0){
+            for(i=0; i<friendIds.length; i++){
+                user = await User.findOne({ _id: friendIds[i] });
+                users.push(user);
+            }
+        }
+        else{
+            users = []
+        }
+       
         // console.log(users);
         res.send(users);
     })
