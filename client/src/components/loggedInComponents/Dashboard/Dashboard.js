@@ -17,7 +17,7 @@ import io from 'socket.io-client';
 
 
 const socketUrl = io('http://localhost:5000');
-let id;
+// let id;
 const socket = io(socketUrl);
 
 socket.on('connect', () => {

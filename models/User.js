@@ -8,7 +8,8 @@ const userSchema = new Schema({
     displayName: String,
     myFriends: Array,
     friendReqRec: Array,
-    friendReqSent: Array
+    friendReqSent: Array,
+    image: String
 });
 
 mongoose.model('users', userSchema);

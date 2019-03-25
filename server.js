@@ -7,7 +7,14 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketio = require('socket.io');
 const multer = require('multer');
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ dest: 'uploads/' });
+const fs = require('fs');
+
+
+const PORT = process.env.PORT || 5000;
+let users = {
+    online: []
+  };
 
 
 //Models and Services
@@ -15,10 +22,11 @@ require('./models/User');
 require('./models/Post');
 require('./services/passport');
 
-const PORT = process.env.PORT || 5000;
+
 
 //Connect to Mongo using Mongoose
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(() => console.log("connected <3"));             //Not connecting on hostel wifi for some reason :/
+const User = mongoose.model('users');
 
 //App Setup
 let app = express();
@@ -39,9 +47,7 @@ let io = module.exports.io = socketio(server);
 // const SocketManager = require('./SocketManager');
 
 
-let users = {
-  online: []
-};
+
 
 io.on('connection', (socket) => {
   console.log("Socket ID: " + socket.id);
@@ -107,10 +113,20 @@ app.get(
   }
 );
 
-app.post('/api/uploadPic', (req, res) => {
+app.post('/api/uploadPic', upload.any(), (req, res) => {
 
-  console.log(req.body)
-  res.send(req.body);
+    console.log(req.files)
+    let file = req.files[0];
+    let filename = (new Date).valueOf()+"-"+file.originalname;
+    fs.rename(file.path, 'public/images/'+filename, (err) => {
+        if(err){
+            console.log(err);
+        }
+        console.log("FILE UPLOADED.........")
+    })
+    // fs.rename(file.[a])
+  
+  
 
 });
 
@@ -148,11 +164,3 @@ require('./routes/imgRoutes')(app);
 
 
 ///////////logout problemsss
-
-
-
-
-
-
-
-

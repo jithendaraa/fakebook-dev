@@ -5,10 +5,8 @@ module.exports = app => {
 
     app.get('/api/frndReq', async (req, res) => {
         let currentUser = req.query.currentUser;
-        // console.log(currentUser)
         let user = await User.findOne({ _id: currentUser });
         let frndReqRec = user.friendReqRec;
-        // console.log(frndReqRec)
         let i = 0;
         let users = [];
 

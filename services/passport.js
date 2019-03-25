@@ -33,7 +33,8 @@ passport.use(
                 email: profile.emails[0].value,
                 displayName: profile.displayName,
                 myFriends: [],
-                friendReq: []
+                friendReq: [],
+                image: ''
             }).save();
             done(null, user);
         }
