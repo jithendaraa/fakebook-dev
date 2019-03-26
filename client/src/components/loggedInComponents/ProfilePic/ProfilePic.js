@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classes from './ProfilePic.css';
-import SlideInPopup from '../../UI/SlideInPopup/SlideInPopup';
+import SlideInPopup from '../../UI/EditDpPopup/EditDpPopup';
 
 import * as actions from '../../../actions';
 

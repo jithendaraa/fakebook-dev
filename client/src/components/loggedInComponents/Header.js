@@ -8,6 +8,8 @@ import Logout from '../loggedInComponents/Logout/Logout';
 import Button from '../UI/Button/Button';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import NewStoryPopup from '../UI/NewStoryPopup/NewStoryPopup';
+
 // import { func } from 'prop-types';
 
 // import io from 'socket.io-client';
@@ -50,7 +52,8 @@ class Header extends Component {
                 </div>
                 <div>
                     <div className={classes.SubHeader}>
-                        <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div>
+                        <div style={d1Style}><NewStoryPopup /></div>
+                        {/* <div style={d1Style}><Button btnText="+ New Story" href="/newStory"></Button></div> */}
                         <div style={d2Style}><Button btnText="+ New Post" href="/newPost"></Button></div>
                         <div style={d2Style}><Button btnText="Chat" href="/chat"></Button></div>
                         <div style={d2Style}><Button btnText="My Posts" href="/myPosts"></Button></div>
