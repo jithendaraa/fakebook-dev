@@ -6,9 +6,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketio = require('socket.io');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-const fs = require('fs');
+
 
 
 const PORT = process.env.PORT || 5000;
@@ -31,6 +29,7 @@ const User = mongoose.model('users');
 //App Setup
 let app = express();
 
+app.use(express.static(__dirname + 'public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
@@ -113,22 +112,8 @@ app.get(
   }
 );
 
-app.post('/api/uploadPic', upload.any(), (req, res) => {
 
-    console.log(req.files)
-    let file = req.files[0];
-    let filename = (new Date).valueOf()+"-"+file.originalname;
-    fs.rename(file.path, 'public/images/'+filename, (err) => {
-        if(err){
-            console.log(err);
-        }
-        console.log("FILE UPLOADED.........")
-    })
-    // fs.rename(file.[a])
-  
-  
 
-});
 
 app.get('/api/logout', (req, res) => {
   console.log("logged out: " + req.user.id);

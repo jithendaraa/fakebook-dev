@@ -20,3 +20,7 @@ export const FETCH_DASHBOARD_POSTS = 'fetch_dashboard_posts';
 
 export const GET_MY_FRIENDS = 'get_my_friends';
 
+export const GET_DP = 'get_dp';
+// export const PUT_DP = 'put_dp';
+
+// export const GET_

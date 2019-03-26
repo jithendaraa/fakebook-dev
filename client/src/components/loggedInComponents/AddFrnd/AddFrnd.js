@@ -12,7 +12,7 @@ class AddFrnd extends Component {
 
     changed = () => {
         const val = document.getElementById("frnds_searchbar").value;
-        console.log(2);
+        // console.log('changed');
         this.props.fetchUsers(val)
             .then(() => {
                 console.log("Search result ka users fetched");
@@ -26,7 +26,6 @@ class AddFrnd extends Component {
             let frndStatusBool = 0;
             let frndStatus;
             let frndReqSent = 0;
-            console.log(frndReqSent);
             const myFriendsArr = this.props.auth.myFriends;
             const searchResults = this.props.users.map(user => {
             frndStatusBool = 0;
@@ -63,7 +62,8 @@ class AddFrnd extends Component {
                             name={user.displayName}
                             email={user.email}
                             frndStatusBool={frndStatusBool}
-                            frndStatus={frndStatus} />
+                            frndStatus={frndStatus} 
+                            imgSrc={'/images/'+user.image} />
                     </center>
                 </div>
             );
@@ -71,12 +71,12 @@ class AddFrnd extends Component {
         return searchResults;
     }
 
+
     render() {
         return (
             <div>
                 <Header />
                 <br />
-
                 Add Friend Popup box/page
                 <SearchBar
                     id="frnds_searchbar"

@@ -17,11 +17,11 @@ import io from 'socket.io-client';
 
 
 const socketUrl = io('http://localhost:5000');
-// let id;
+// // let id;
 const socket = io(socketUrl);
 
 socket.on('connect', () => {
-    console.log("Connected");
+    console.log("Connected to sockets");
 });
 
 // socket.on('loggedIn', (id) => {

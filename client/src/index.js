@@ -19,7 +19,7 @@ import { combineReducers } from 'redux';
 import frndReqReducer from './reducers/frndReqReducer';
 import dashboardPostsReducer from './reducers/dashboardPostsReducer';
 import myFriendsReducer from './reducers/myFriendsReducer';
-
+import dpReducer from './reducers/dpReducer';
 
 const reducers = combineReducers({
     auth: authReducer,                                  //state.auth      
@@ -27,7 +27,8 @@ const reducers = combineReducers({
     users: usersReducer,                                //state.users
     frndReq: frndReqReducer,                            //state.frndReq           
     dashboardPosts: dashboardPostsReducer,              //state.dashboardPosts
-    myFriends: myFriendsReducer
+    myFriends: myFriendsReducer,                        
+    dpSrc: dpReducer                                    //state.dpSrc
 });
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));                   //Store created from reducers

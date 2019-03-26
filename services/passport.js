@@ -34,7 +34,7 @@ passport.use(
                 displayName: profile.displayName,
                 myFriends: [],
                 friendReq: [],
-                image: ''
+                image: 'empty.png'
             }).save();
             done(null, user);
         }

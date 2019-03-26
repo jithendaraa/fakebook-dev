@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
 
+
 import Zoom from 'react-reveal/Zoom';
 
 const styles = {
@@ -22,6 +23,14 @@ const styles = {
   pos: {
     marginBottom: 12,
   },
+  userDp: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "70px",
+    transition: "0.8s",
+    filter: "grayscale(100%)",
+    cursor: "pointer",
+  },
 };
 
 function SimpleCard(props) {
@@ -34,6 +43,23 @@ function SimpleCard(props) {
     });
   }
 
+  function entered(){
+    // console.log("entered");
+    let imgElement = document.getElementById(props.id);
+    imgElement.style.borderRadius = "0px";
+    imgElement.style.filter = "grayscale(0%)";
+    imgElement.style.transition = "0.8s";
+
+  }
+
+  function left(){
+    // console.log("left")
+    let imgElement = document.getElementById(props.id);
+    imgElement.style.borderRadius = "70px";
+    imgElement.style.filter = "grayscale(100%)";
+    imgElement.style.transition = "0.8s";
+  }
+
   return (
     <Card className={classes.card}>
       <Zoom>
@@ -41,22 +67,33 @@ function SimpleCard(props) {
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             User
         </Typography>
-          <Typography variant="h5" component="h4">
-            {props.name}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {props.txt}
-          </Typography>
-          <Typography component="p">
-            {props.email}
-          </Typography>
+        <div style={{display: "flex", flexWrap: "wrap"}}>
+            <div style={{paddingLeft: "20px"}}>
+              <img alt="dp" className={classes.userDp} onMouseEnter={entered} onMouseLeave={left} src={props.imgSrc} id={props.id} />
+            </div>
+            <div style={{paddingTop: "30px", paddingLeft: "30px"}}>
+                <Typography variant="h5" component="h4">
+                      {props.name}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  {props.txt}
+                </Typography>
+                <Typography component="p">
+                  {props.email}
+                </Typography>
+            </div>
+        </div>          
         </CardContent>
         <CardActions>
-          {/* <Button id={props.id}>Fraaands</Button> */}
-          {props.frndStatusBool === 1 ? <Button size="small">{props.frndStatus}</Button> : <Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>}
-
-          {/* <Button size="small"></Button> */}
-
+          <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}> 
+                <div>{props.frndStatusBool === 1 ? 
+                            (props.frndStatus == "Friends" ? (<Button size="small">Friends</Button>) : (<Button size="small">{props.frndStatus}</Button>) ): 
+                      (<Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>)}
+                </div>
+                {/* <div>{props.frndStatus == "Friends" ? <Button size="small">Unfriend</Button> : null }</div>
+                <div>{props.frndStatus == "Request sent" ? <Button size="small">Cancel Request</Button> : null }</div> */}
+          </div>
+          
         </CardActions>
       </Zoom>
     </Card>

@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+
+
 const User = mongoose.model('users');
 
 module.exports = (app) => {
+
+    
 
     //API endpoint for fuzzy search
     app.get('/api/users', async (req, res) => {

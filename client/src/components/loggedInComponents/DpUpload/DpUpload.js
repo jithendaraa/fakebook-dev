@@ -4,25 +4,32 @@ import Button from '../../UI/Button/Button';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import ReactCrop from 'react-image-crop';
+// import ReactCrop from 'react-image-crop';
+import * as actions from '../../../actions';
 // import 'react-image-crop/dist/ReactCrop.css';
 // import './DpUpload.css';
-import 'react-image-crop/lib/ReactCrop.scss';
-
+// import 'react-image-crop/lib/ReactCrop.scss';
+// import * as imgs from '../../../assets/logos';
 
 
 const acceptedFileTypes = 'image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map(item => {
-    { return item.trim() }
+     return item.trim() 
 });
 
 class DpUpload extends Component {
 
     state = {
-        selectedFile: null,
         selectedImg: null,
-        imgSrc: null
+        imgSrc: null,
+        imgName: null
     }
+
+    // componentDidMount = async () => {
+    //     await this.props.fetchUser();
+    //     console.log("done");
+    //     console.log(this.props.auth._id)
+    // }
 
     // constructor(props) {
     //     super(props)
@@ -34,11 +41,6 @@ class DpUpload extends Component {
     //     }
     // }
 
-    fileSelectedHandler = event => {
-        this.setState({
-            selectedFile: event.target.files[0]
-        });
-    }
 
     imgSelectedHandler = event => {
         this.setState({
@@ -46,49 +48,21 @@ class DpUpload extends Component {
         });
     }
 
-    fileUploadHandler = () => {
-
-        let fd = new FormData();
-
-        if (this.state.selectedFile != null) {
-            const id = this.props.auth._id;
-            console.log(id)
-            console.log(this.state.selectedFile)
-            console.log(this.state.selectedFile.name)
-            fd.append('image', this.state.selectedFile, this.state.selectedFile.name);
-            console.log(fd);
-            axios.post('/api/uploadPic/', fd, {
-                onUploadProgress: progressEvent => {
-                    console.log('Upload Progress: ' + Math.round(progressEvent.loaded / progressEvent.total * 100) + "%")
-                }
-            }).then(() => {
-                console.log("uploaded");
-            });
-        }
-
-        if (this.state.selectedFile == null) {
-            alert("Please select an image to upload first");
-        }
-    }
 
     imgUploadHandler = () => {
 
         let fd = new FormData();
-
         if (this.state.selectedImg != null) {
-            const id = this.props.auth._id;
-            console.log(id)
-            console.log(this.state.selectedImg)
-            console.log(this.state.selectedImg.name)
             fd.append('image', this.state.selectedImg, this.state.selectedImg.name);
-            console.log(fd);
-            console.log(typeof(fd));
+        
+            console.log(this.state.selectedImg)
             axios.post('/api/uploadPic/', fd, {
                 onUploadProgress: progressEvent => {
                     console.log('Upload Progress: ' + Math.round(progressEvent.loaded / progressEvent.total * 100) + "%")
                 }
             }).then(() => {
-                console.log("uploaded Img");
+                alert("Profile Picture Uploaded");
+                window.location.href="/";
             });
         }
 
@@ -110,9 +84,9 @@ class DpUpload extends Component {
     }
 
     handleOnDrop = ( files, rejectedFiles, event) => {
-        console.log(files);              //
-        console.log("rejected files: " + rejectedFiles);
-        console.log(event.target.files[0])
+        // console.log(files);              //
+        // console.log("rejected files: " + rejectedFiles);
+        // console.log(event.target.files[0])
         if (files && files.length > 0) {
             const isVerified = this.verifyFile(files);
             if (isVerified) {
@@ -121,15 +95,16 @@ class DpUpload extends Component {
                 const currentFile = files[0];
                 const myFileItemReader = new FileReader();
                 myFileItemReader.addEventListener("load", () => {
+                    // console.log(myFileItemReader)
                     // console.log(myFileItemReader.result);
                     this.setState({
                         imgSrc: myFileItemReader.result,
                         selectedImg: event.target.files[0]
-                    })
+                    });
+
                 }, false);
 
                 myFileItemReader.readAsDataURL(currentFile);
-
             }
         }
         if (rejectedFiles && rejectedFiles.length > 0) {
@@ -141,56 +116,30 @@ class DpUpload extends Component {
         this.setState({ imgSrc: null });
     }
 
-    handleOnCropChange = (crop) => {
-        console.log(crop);
-        this.setState({ crop });
-        console.log(this.state);
-    }
-
-    handleImageLoaded = (image) => {
-        console.log(image);
-        // console.log(this.state.imgSrc)
-    }
-
-    handleOnCropComplete = (crop, pixelCrop) => {
-        console.log(crop, pixelCrop);
+    click = async() => {
+        const img = await axios.get('/api/uploadPic');
+        console.log(img.data);
+        this.setState({ imgName: '/images/'+img.data });
     }
 
 
 
     render() {
         const { imgSrc } = this.state;
+        
         return (
             <div>
-
-                <input
-                    style={{ display: "none" }}
-                    type="file"
-                    onChange={this.fileSelectedHandler}
-                    ref={fileInput => this.fileInput = fileInput} />
-                <Button onClick={() => this.fileInput.click()} btnText="Pick File" />
-                <Button btnText="Upload Image" onClick={this.fileUploadHandler} />
-
-                <center>
-
                     <center>
                         <h1>+ Drop file here</h1>
                         {imgSrc !== null ?
                             <div>
-                                {/* {imgSrc} */}
                                 <img src={imgSrc} onClick={this.dropImg} alt='Preview' />
                                 <Button btnText="Upload Image" onClick={this.imgUploadHandler} />
-                                {/* <ReactCrop  
-                                    // className={classes.ReactCrop}
-                                    src={imgSrc} 
-                                    crop={this.state.crop} 
-                                    onImageLoaded={this.handleImageLoaded}
-                                    onComplete={this.handleOnCropComplete}
-                                    onChange={this.handleOnCropChange}/> */}
-
+                                
                             </div> :
+
                             <div>
-                                <Dropzone onDrop={this.handleOnDrop} accept={acceptedFileTypes} multiple={false}>
+                                <Dropzone onDrop={this.handleOnDrop} accept={acceptedFileTypes} multiple={false} >
                                     {({ getRootProps, getInputProps }) => (
                                         <section>
                                             <div {...getRootProps()}>
@@ -208,17 +157,15 @@ class DpUpload extends Component {
                                             </div>
                                         </section>
                                     )}
-
                                 </Dropzone>
                                 
                                 
-
+                                <Button btnText="Get Image" onClick={this.click} />
+                                {   (this.state.imgName == null) ? (<div>No</div>) : (<p><img alt="dp" width="50" height="50" src={this.state.imgName} /></p>) }
+                                
                             </div>
                         }
                     </center>
-
-                </center>
-
             </div>
         )
     }
@@ -230,4 +177,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(DpUpload);
+export default connect(mapStateToProps, actions)(DpUpload);

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import NavigationItems from '../Navigation/NavigationItems';
 import Header from '../loggedInComponents/Header';
 import Dashboard from '../loggedInComponents/Dashboard/Dashboard';
+import Spinner from '../UI/Spinner/Spinner'
 
 
 
@@ -42,7 +43,7 @@ class Home extends Component {
 
         switch (this.props.auth) {
             case null:
-                return;
+                return (<div style={{paddingTop: "350px"}}><center><Spinner /></center></div>);
             case false:
                 return (<div>{guestHome}</div>);
             default:

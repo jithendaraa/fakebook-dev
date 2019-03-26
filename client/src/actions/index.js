@@ -37,8 +37,7 @@ export const dbpostLikeClicked = (postId, userId) => async dispatch => {
         userId: userId,
         upvote: 1
     };
-    const postReq = await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
-    console.log(postReq);
+    await axios.post('/api/postreact', req);                               //post react refers to liking, disliking or commenting on a post
     const getPost = await axios.get('/api/dashboardPosts', { params: { currentUser: userId } });
     dispatch({ type: actions.DB_POST_LIKE_CLICKED, payload: getPost.data });
 }
@@ -158,6 +157,12 @@ export const getMyFriends = (friendIds) => async dispatch => {
         }
     });
     dispatch({ type: actions.GET_MY_FRIENDS, payload: myFriends.data })
+}
+
+export const getDp = () => async dispatch => {
+    let dpSrc = await axios.get('/api/uploadPic');
+    dpSrc = '/images/' + dpSrc.data;
+    dispatch({ type: actions.GET_DP, payload: dpSrc });
 }
 
 
