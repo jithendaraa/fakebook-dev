@@ -85,14 +85,8 @@ function SimpleCard(props) {
         </div>          
         </CardContent>
         <CardActions>
-          <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}> 
-                <div>{props.frndStatusBool === 1 ? 
-                            (props.frndStatus == "Friends" ? (<Button size="small">Friends</Button>) : (<Button size="small">{props.frndStatus}</Button>) ): 
-                      (<Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>)}
-                </div>
-                {/* <div>{props.frndStatus == "Friends" ? <Button size="small">Unfriend</Button> : null }</div>
-                <div>{props.frndStatus == "Request sent" ? <Button size="small">Cancel Request</Button> : null }</div> */}
-          </div>
+          <div>{props.frndStatusBool === 1 ? <Button size="small">{props.frndStatus}</Button> : <Button id="addFrnd" size="small" onClick={clicked}>Add Friend</Button>}</div>
+
           
         </CardActions>
       </Zoom>
