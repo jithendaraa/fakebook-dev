@@ -7,7 +7,6 @@ class Logout extends Component {
 
     logout = () => (
         <div>
-            {/* <b>Logged in as: {this.userName()}</b> */}
              <Button href='/api/logout' btnText="Logout"/>
         </div>
     );

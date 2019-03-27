@@ -5,8 +5,6 @@ import SlideInPopup from '../../UI/EditDpPopup/EditDpPopup';
 
 import * as actions from '../../../actions';
 
-
-
 class ProfilePic extends Component {
 
     state = {
@@ -20,7 +18,7 @@ class ProfilePic extends Component {
 
     componentDidMount(){
         this.props.fetchUser();
-        console.log(this.props.auth._id);
+        // console.log(this.props.auth._id);
         this.getDpSrc();
     }
 

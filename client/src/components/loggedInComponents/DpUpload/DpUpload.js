@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-// import classes from './DpUpload.css';
 import Button from '../../UI/Button/Button';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-// import ReactCrop from 'react-image-crop';
 import * as actions from '../../../actions';
-// import 'react-image-crop/dist/ReactCrop.css';
-// import './DpUpload.css';
-// import 'react-image-crop/lib/ReactCrop.scss';
-// import * as imgs from '../../../assets/logos';
-
 
 const acceptedFileTypes = 'image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map(item => {
@@ -24,23 +17,6 @@ class DpUpload extends Component {
         imgSrc: null,
         imgName: null
     }
-
-    // componentDidMount = async () => {
-    //     await this.props.fetchUser();
-    //     console.log("done");
-    //     console.log(this.props.auth._id)
-    // }
-
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         imgSrc: null,
-    //         crop: {
-    //             aspect: 1/1
-    //         }
-    //     }
-    // }
-
 
     imgSelectedHandler = event => {
         this.setState({
@@ -84,9 +60,6 @@ class DpUpload extends Component {
     }
 
     handleOnDrop = ( files, rejectedFiles, event) => {
-        // console.log(files);              //
-        // console.log("rejected files: " + rejectedFiles);
-        // console.log(event.target.files[0])
         if (files && files.length > 0) {
             const isVerified = this.verifyFile(files);
             if (isVerified) {
@@ -95,8 +68,6 @@ class DpUpload extends Component {
                 const currentFile = files[0];
                 const myFileItemReader = new FileReader();
                 myFileItemReader.addEventListener("load", () => {
-                    // console.log(myFileItemReader)
-                    // console.log(myFileItemReader.result);
                     this.setState({
                         imgSrc: myFileItemReader.result,
                         selectedImg: event.target.files[0]
@@ -118,15 +89,11 @@ class DpUpload extends Component {
 
     click = async() => {
         const img = await axios.get('/api/uploadPic');
-        console.log(img.data);
         this.setState({ imgName: '/images/'+img.data });
     }
 
-
-
     render() {
         const { imgSrc } = this.state;
-        
         return (
             <div>
                     <center>
@@ -135,7 +102,6 @@ class DpUpload extends Component {
                             <div>
                                 <img src={imgSrc} onClick={this.dropImg} alt='Preview' />
                                 <Button btnText="Upload Image" onClick={this.imgUploadHandler} />
-                                
                             </div> :
 
                             <div>
@@ -158,8 +124,6 @@ class DpUpload extends Component {
                                         </section>
                                     )}
                                 </Dropzone>
-                                
-                                
                                 <Button btnText="Get Image" onClick={this.click} />
                                 {   (this.state.imgName == null) ? (<div>No</div>) : (<p><img alt="dp" width="50" height="50" src={this.state.imgName} /></p>) }
                                 

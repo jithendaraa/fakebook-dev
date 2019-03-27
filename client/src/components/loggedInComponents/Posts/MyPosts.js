@@ -34,13 +34,11 @@ class MyPosts extends Component {
     posts = () => {console.log(this.props.posts)}
 
     likeClicked(id) {
-        console.log("like Clicked");
         const userId = this.userId();
         this.props.postLikeClicked(id, userId);
     }
 
     dislikeClicked(id){
-        console.log("dislike Clicked");
         const userId = this.userId();
         this.props.postDislikeClicked(id, userId);
     }
@@ -72,8 +70,7 @@ class MyPosts extends Component {
                                     likeOnClick={() => this.likeClicked(post._id)}
                                     dislikeOnClick={() => this.dislikeClicked(post._id)}
                                 /><br />
-                            </LightSpeed>
-                               
+                            </LightSpeed>           
                             </div>
                         )
                     });

@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-
-// import NewPost from '../NewPost/NewPost';
-// import MyPosts from '../Posts/MyPosts';
 import ProfilePic from '../ProfilePic/ProfilePic';
 import FrndReqNotifPopper from '../../UI/FrndReqNotifPopper/FrndReqNotifPopper';
 import { connect } from 'react-redux';
@@ -11,50 +8,28 @@ import SimpleCard from '../../UI/Card/SimpleCard';
 import MyFriends from '../../UI/MyFriends/MyFriends';
 import classes from './Dashboard.css';
 import Spinner from '../../UI/Spinner/Spinner';
+import socketIoClient from 'socket.io-client';
+import { Button } from '@material-ui/core';
+import MyBtn from '../../UI/Button/Button';
 
 
-import io from 'socket.io-client';
-
-
-const socketUrl = io('http://localhost:5000');
-// // let id;
-const socket = io(socketUrl);
-
-socket.on('connect', () => {
-    console.log("Connected to sockets");
-});
-
-// socket.on('loggedIn', (id) => {
-//     // console.log(user)
-//     console.log(id)
-// } )
-
-// window.addEventListener('offline', offline);
-// window.addEventListener('online', online);
-
-// function online(e){
-//     console.log(e.type);
-//     if( id == null ){
-
-//     }
-//     socket.emit('online', id);
-// }
-
-// function offline(e){
-//     console.log(e.type);
-//     socket.emit('offline', id);
-// }
 
 class Dashboard extends Component {
 
+    state = {
+        socketId: null,
+        socket: socketIoClient('http://localhost:5000'),
+        chats: null
+    }
+
     userId = () => (this.props.auth._id)
 
-    likeClicked = async(id) => {
+    likeClicked = async (id) => {
         const userId = this.userId();
         await this.props.dbpostLikeClicked(id, userId);
     }
 
-    dislikeClicked = async(id) => {
+    dislikeClicked = async (id) => {
         const userId = this.userId();
         await this.props.dbpostDislikeClicked(id, userId);
     }
@@ -69,7 +44,58 @@ class Dashboard extends Component {
     }
 
     async componentDidMount() {
-        // id = this.userId();
+
+        this.state.socket.on("connect", () => {
+            console.log(this.state.socket)
+
+            this.setState({ socketId: this.state.socket.id });
+
+            this.state.socket.on('output', async chats => {
+                // console.log(chats)
+                let texts = [];
+                chats.map(chat => {
+                    if (chat.fromId == this.props.auth._id || chat.toId == this.props.auth._id) {
+                        texts.push(chat);
+                    }
+                });
+                // console.log(texts); 
+                await this.setState({ chats: texts });
+                console.log(this.state.chats);
+                let displayTexts = document.getElementById("displayTexts");
+
+                // this.state.socket.emit('dummy', t);
+
+                if (texts.length > 0) {
+                    texts.map(text => {
+                        let parentDiv = document.createElement("div");
+                        let p = document.createElement("p");
+                        p.innerHTML = text.fromName.split(" ")[0] + ": " + text.message;
+                        p.style.display = "inline-block";
+                        p.style.padding = "2px 5px";
+                        p.style.borderRadius = "10px";
+                        p.style.backgroundColor = "black";
+                        p.style.color = "goldenrod";
+                        p.style.wordBreak = "break-all";
+                        p.style.maxWidth = "200px";
+                        if (text.fromId == this.props.auth._id) {
+                            p.style.backgroundColor = "goldenrod";
+                            p.style.color = "black";
+                            parentDiv.align = "right";
+                            p.style.textAlign = "left";
+                        }
+                        parentDiv.appendChild(p);
+                        displayTexts.appendChild(parentDiv);
+                    });
+                }
+
+                
+
+            });
+            console.log("connected to sockets");
+        });
+
+        
+
         await this.getPosts();
     }
 
@@ -80,9 +106,10 @@ class Dashboard extends Component {
     renderPosts = () => {
         return (
             <div>
+                {this.state.socketId == null ? (<div>sad</div>) : (<div>{this.state.socketId}</div>)}
                 {
                     this.props.dashboardPosts.reverse().map(dashboardPost => {
-                        
+
                         return (
                             <div key={dashboardPost.post._id} style={{ paddingTop: "10px", paddingLeft: "30px" }}>
                                 <SimpleCard
@@ -106,21 +133,48 @@ class Dashboard extends Component {
         )
     }
 
-    checkDashboard(){
-       if(this.props.dashboardPosts){
-           if(this.props.dashboardPosts.length === 0){
-               return (<div>No posts to display</div>)
-           }
-           else if(this.props.dashboardPosts.length >= 1){
-               return this.renderPosts();
-           }
-       }
-       else{
-           return (<Spinner />)
-       }
+    checkDashboard() {
+        if (this.props.dashboardPosts) {
+            if (this.props.dashboardPosts.length === 0) {
+                return (<div>No posts to display</div>)
+            }
+            else if (this.props.dashboardPosts.length >= 1) {
+                return this.renderPosts();
+            }
+        }
+        else {
+            return (<Spinner />)
+        }
     }
 
+    sendTextClicked = () => {
+        let message = document.getElementById("textInp").value;
+        let from = this.props.auth._id;
+        document.getElementById("textInp").value = "";
+        console.log(message);
 
+        let textObj = {
+            fromId: this.props.auth._id,
+            fromName: this.props.auth.displayName,
+            toId: this.props.myFriends[0]._id,
+            toName: this.props.myFriends[0].displayName,
+            message: message
+        };
+
+        this.state.socket.on('connect', (socket) => {
+            this.state.socket.emit('message', textObj);
+
+            this.state.socket.on('message', textObj => {
+                
+                console.log("gotcahaa")
+            })
+        })
+        
+
+        
+    }
+
+   
 
     render() {
         return (
@@ -132,19 +186,29 @@ class Dashboard extends Component {
                     <div style={{ paddingLeft: "10px" }}>
                         <MyFriends />
                     </div>
-
                 </div>
                 <div style={{ paddingLeft: "30px" }}>
                     <ProfilePic />
                     <h4>Dashboard</h4>
-                    
-                    {/* <div> */}
-                        {this.checkDashboard()}
-                    {/* </div> */}
+                    {/* {this.checkDashboard()} */}
+                    {/* <div>a</div>
+                        <div>ds</div> */}
+                    {/* {this.state.chats} */}
+
+                    <div id="chatDiv" style={{ backgroundColor: "gray", height: "1000px" }}>
+
+                        <div id="displayTexts" style={{ backgroundColor: "white", width: "300px", height: "400px", border: "1px solid black", overflowY: "scroll", overflowX: "hidden" }}>
+                            <div style={{ width: "300px", border: "1px solid black" }}>Username</div>
+                            {/* {this.receiveMessage()}<div>hi</div> */}
+                        </div>
+
+                        <div id="sendText" style={{ display: "flex", flexWrap: "wrap" }}>
+
+                            <input id="textInp" type="text" placeholder="Type your text here" />
+                            <MyBtn btnText="send" onClick={this.sendTextClicked} />
+                        </div>
+                    </div>
                 </div>
-
-
-
             </div>
         );
     }

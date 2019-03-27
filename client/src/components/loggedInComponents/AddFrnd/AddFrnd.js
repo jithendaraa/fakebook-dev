@@ -12,7 +12,6 @@ class AddFrnd extends Component {
 
     changed = () => {
         const val = document.getElementById("frnds_searchbar").value;
-        // console.log('changed');
         this.props.fetchUsers(val)
             .then(() => {
                 console.log("Search result ka users fetched");

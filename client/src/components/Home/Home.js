@@ -39,14 +39,13 @@ const guestHome = (
 class Home extends Component {
 
     renderContent() {
-        
-
         switch (this.props.auth) {
             case null:
                 return (<div style={{paddingTop: "350px"}}><center><Spinner /></center></div>);
             case false:
                 return (<div>{guestHome}</div>);
             default:
+                
                 let loggedInHome = (
                     <div>
                         <Header />

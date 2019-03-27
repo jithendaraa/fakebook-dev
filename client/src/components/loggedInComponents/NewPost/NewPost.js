@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Header from '../Header';
 
 import classes from './NewPost.css';
 import TextArea from '../../UI/TextArea/TextArea';
@@ -23,11 +22,7 @@ class NewPost extends Component {
             <div>
                 <center>
                     <div className={classes.NewPostWrapper}>
-                        <center><h3>New Post</h3></center>
-                        {/* <form 
-                            action='/api/posts' 
-                            method="post"
-                            > */}
+                        <center><h3>New Post</h3></center>     
                             <TextArea
                                 placeholder="Type Something here"
                                 type="text"
@@ -40,7 +35,6 @@ class NewPost extends Component {
                                 btnText="Post" 
                                 onClick={this.submitPost} 
                                 />
-                        {/* </form> */}
                     </div>
                 </center>
             </div>
