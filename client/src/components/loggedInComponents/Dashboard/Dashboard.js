@@ -11,16 +11,11 @@ import Spinner from '../../UI/Spinner/Spinner';
 import socketIoClient from 'socket.io-client';
 import { Button } from '@material-ui/core';
 import MyBtn from '../../UI/Button/Button';
-
+import Chatbox from '../Chat/Chatbox';
+import Users from '../Users/Users'
 
 
 class Dashboard extends Component {
-
-    state = {
-        socketId: null,
-        socket: socketIoClient('http://localhost:5000'),
-        chats: null
-    }
 
     userId = () => (this.props.auth._id)
 
@@ -43,76 +38,9 @@ class Dashboard extends Component {
         console.log(id, fetch);
     }
 
-    async componentDidMount() {
-
-        this.state.socket.on("connect", () => {
-
-            this.setState({ socketId: this.state.socket.id });
-
-            let displayTexts = document.getElementById("displayTexts");
-
-            this.state.socket.on('output', async chats => {
-                let texts = [];
-                chats.map(chat => {
-                    if (chat.fromId == this.props.auth._id || chat.toId == this.props.auth._id) {
-                        texts.push(chat);
-                    }
-                });
-                await this.setState({ chats: texts });
-
-                if (texts.length > 0) {
-                    texts.map(text => {
-                        let parentDiv = document.createElement("div");
-                        let p = document.createElement("p");
-                        p.innerHTML = text.fromName.split(" ")[0] + ": " + text.message;
-                        p.style.display = "inline-block";
-                        p.style.padding = "2px 5px";
-                        p.style.borderRadius = "10px";
-                        p.style.backgroundColor = "black";
-                        p.style.color = "goldenrod";
-                        p.style.wordBreak = "break-all";
-                        p.style.maxWidth = "200px";
-                        if (text.fromId == this.props.auth._id) {
-                            p.style.backgroundColor = "goldenrod";
-                            p.style.color = "black";
-                            parentDiv.align = "right";
-                            p.style.textAlign = "left";
-                        }
-                        parentDiv.appendChild(p);
-                        displayTexts.appendChild(parentDiv);
-                    });
-                }
-            });
-
-            this.state.socket.on('message', textObj => {
-                console.log("received")
-            //     let parentDiv = document.createElement("div");
-            //     let p = document.createElement("p");
-            //     p.innerHTML = textObj.fromName.split(" ")[0] + ": " + textObj.message;
-            //     p.style.display = "inline-block";
-            //     p.style.padding = "2px 5px";
-            //     p.style.borderRadius = "10px";
-            //     p.style.backgroundColor = "black";
-            //     p.style.color = "goldenrod";
-            //     p.style.wordBreak = "break-all";
-            //     p.style.maxWidth = "200px";
-            //     if (textObj.fromId == this.props.auth._id) {
-            //         p.style.backgroundColor = "goldenrod";
-            //         p.style.color = "black";
-            //         parentDiv.align = "right";
-            //         p.style.textAlign = "left";
-            //     }
-            //     parentDiv.appendChild(p);
-            //     displayTexts.appendChild(parentDiv);
-            })
-
-            console.log("connected to sockets");
-        });
-
+    async componentDidMount() {                                            
         await this.getPosts();
     }
-
-
 
     commmentsOnClick = (id) => {
         console.log("Comment of post " + id + " clicked")
@@ -167,6 +95,8 @@ class Dashboard extends Component {
         let from = this.props.auth._id;
         document.getElementById("textInp").value = "";
         console.log(message);
+        let dt = document.getElementById("displayTexts");
+        dt.scrollTop = dt.scrollHeight;
 
         let textObj = {
             fromId: this.props.auth._id,
@@ -177,44 +107,45 @@ class Dashboard extends Component {
         };
 
         this.state.socket.emit('message', textObj);
-
         console.log("sent")
-
-
     }
-
-
 
     render() {
         return (
             <div>
-                <div style={{ paddingLeft: "30px" }} className={classes.Header}>
+                <div className={classes.Header}>
                     <div>
                         <FrndReqNotifPopper />
                     </div>
                     <div style={{ paddingLeft: "10px" }}>
-                        <MyFriends />
+                        <MyFriends/>
                     </div>
                 </div>
-                <div style={{ paddingLeft: "30px" }}>
+                <div  style={{ paddingLeft: "30px" }}>
                     <ProfilePic />
                     <h4>Dashboard</h4>
                     {/* {this.checkDashboard()} */}
-
-
-
-                    <div id="chatDiv" style={{ backgroundColor: "gray", height: "1000px" }}>
-
-                        <div id="displayTexts" style={{ backgroundColor: "white", width: "300px", height: "400px", border: "1px solid black", overflowY: "scroll", overflowX: "hidden" }}>
-                            <div style={{ width: "300px", border: "1px solid black" }}>Username</div>
+                    
+                        
+        
+                    
+                    {/* <div id="chatDiv" className={classes.ChatDiv}>
+                        <div id="displayTexts" className={classes.DisplayTexts}>
+                            <div className={classes.Username}>Username</div>
                         </div>
 
-                        <div id="sendText" style={{ display: "flex", flexWrap: "wrap" }}>
-
+                        <div id="sendText" className={classes.SendText}>
                             <input id="textInp" type="text" placeholder="Type your text here" />
                             <MyBtn btnText="send" id="sendTxtBtn" onClick={this.sendTextClicked} />
                         </div>
-                    </div>
+                    </div> */}
+
+                </div>
+                {this.props.myFriends ? (<div>{this.props.myFriends.length}</div>) : (<div>Fetching</div>)}
+                <div id="chats" className={classes.Chats}>
+                    
+                    <Chatbox/>
+                    <Users state={this.state}/>
                 </div>
             </div>
         );

@@ -41,8 +41,15 @@ app.use(passport.session());
 let server = http.Server(app)
 let io = socketIo(server);
 
+let onlineUsers = [];
+
 io.on('connection', async (socket) => {
   console.log("New client connected with socket ID: " + socket.id);
+
+  socket.on("online users", userObj => {
+    onlineUsers.push(userObj);
+    io.emit('online users', onlineUsers);
+  });
 
   let chats = await Chat.find({});
   // console.log(chats)
@@ -52,7 +59,7 @@ io.on('connection', async (socket) => {
   //Listen for messages from client side
   socket.on('message', async textObj => {
     console.log("received on server")
-    socket.emit('message', textObj);
+    
     let chat = await new Chat({
       fromId: textObj.fromId,
       toId: textObj.toId,
@@ -60,14 +67,45 @@ io.on('connection', async (socket) => {
       toName: textObj.toName,
       message: textObj.message
     }).save();
-    io.emit('message', textObj);
+    // io.emit('message', textObj);
+    let sendToClients = [];
+    let i;
+    console.log(onlineUsers.length)
+    for(i=0; i<onlineUsers.length; i++){
+      if((onlineUsers[i].userId.toString() == textObj.toId.toString()) || (onlineUsers[i].userId.toString() == textObj.fromId.toString())){
+        if(onlineUsers[i].socketId.toString() !== socket.id.toString()){
+          sendToClients.push(onlineUsers[i].socketId);
+        }
+      }
+    }
+    console.log(sendToClients)
+    sendToClients.map(sendtoClient => {
+      console.log(sendtoClient)
+      io.to(`${sendtoClient}`).emit('message', textObj);
+    //   socket.broadcast.to(sendtoClient).emit('message', textObj); //sending to individual socketid
+    });
+    
+
   });
 
 
 
 
   //Socket Disconnect
-  socket.on("disconnect", () => console.log("Client disconnected"));
+  socket.on("disconnect", () => {
+    
+    let i, pos;
+    for(i=0; i<onlineUsers.length; i++){
+      if(onlineUsers[i].socketId === socket.id){
+        pos = i;
+        console.log(onlineUsers.name + " disconnected of socketID" + onlineUsers.socketId);
+      }
+    }
+    onlineUsers.splice(pos, 1);
+    console.log(onlineUsers);
+    io.emit('online users', onlineUsers)
+    
+  });
 });
 
 server.listen(PORT, () => {

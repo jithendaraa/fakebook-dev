@@ -147,8 +147,6 @@ export const fetchDashboardPosts = (currentUser) => async dispatch => {
 }
 
 
-
-
 export const getMyFriends = (friendIds) => async dispatch => {
 
     const myFriends = await axios.get('/api/myFriends', {

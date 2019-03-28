@@ -57,9 +57,9 @@ class MyFriends extends React.Component {
   renderFriends() {
     const { classes } = this.props;
     if(this.props.myFriends.length === 0){
-        return (<div>No friends</div>);
+        return (<div style={{padding: "8px 8px"}}>No friends</div>);
     }
-    else if(this.props.myFriends === undefined){
+    else if(this.props.myFriends === undefined || this.props.myFriends === null){
       return (<Spinner />)
     }
     else if(this.props.myFriends.length >= 1){
@@ -83,9 +83,14 @@ class MyFriends extends React.Component {
 
     return (
       <div>
-        <Button aria-describedby={id} variant="contained" onClick={this.handleClick}>
+        {this.props.myFriends == null ? 
+          (<Button aria-describedby={id} variant="contained">
+          ...Loading
+        </Button>): 
+          (<Button aria-describedby={id} variant="contained" onClick={this.handleClick}>
           My Friends({this.props.myFriends.length})
-        </Button>
+        </Button>) }
+        
         <Popper id={id} open={open} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>

@@ -1,0 +1,19 @@
+.UsersWrapDiv{
+    background-color: white;
+    padding: 5px 5px;
+    border: 1px solid black;
+}
+
+.Onlinedot{
+    width: 15px;
+    height: 15px;
+    border-radius: 7.5px;
+    background-color: green;
+}
+
+.Offlinedot{
+    width: 15px;
+    height: 15px;
+    border-radius: 7.5px;
+    background-color: gray;
+}
