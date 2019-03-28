@@ -48,10 +48,11 @@ io.on('connection', async (socket) => {
   // console.log(chats)
   socket.emit('output', chats);
 
-  // socket.on('dummy', (t) => {
-  //   console.log(t)
-  //     socket.emit('dummy', t)
-  // })
+  socket.on('dummy', (t) => {
+    console.log(t)
+      socket.emit('dummy', t)
+  });
+
   //Listen for messages from client side
   socket.on('message', async textObj => {
     console.log("received on server")
@@ -63,7 +64,6 @@ io.on('connection', async (socket) => {
       toName: textObj.toName,
       message: textObj.message
     }).save();
-    
   });
 
 

@@ -19,6 +19,7 @@ const button = (props) => {
         <Aux>
             <a href={props.href} style={aStyle}>
                 <Button
+                    id={props.id}
                     type={props.type}
                     variant="contained"
                     color="primary"

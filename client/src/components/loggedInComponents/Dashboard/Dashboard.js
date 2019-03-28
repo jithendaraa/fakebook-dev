@@ -46,25 +46,20 @@ class Dashboard extends Component {
     async componentDidMount() {
 
         this.state.socket.on("connect", () => {
-            console.log(this.state.socket)
 
             this.setState({ socketId: this.state.socket.id });
 
+
+
             this.state.socket.on('output', async chats => {
-                // console.log(chats)
                 let texts = [];
                 chats.map(chat => {
                     if (chat.fromId == this.props.auth._id || chat.toId == this.props.auth._id) {
                         texts.push(chat);
                     }
                 });
-                // console.log(texts); 
                 await this.setState({ chats: texts });
-                console.log(this.state.chats);
                 let displayTexts = document.getElementById("displayTexts");
-
-                // this.state.socket.emit('dummy', t);
-
                 if (texts.length > 0) {
                     texts.map(text => {
                         let parentDiv = document.createElement("div");
@@ -88,16 +83,34 @@ class Dashboard extends Component {
                     });
                 }
 
+
+                let btn = document.getElementById("sendTxtBtn");
+                btn.addEventListener("click", () => {
+                    console.log("h")
+                    
+                    const t = 2;
+                    this.state.socket.emit('dummy', t);
+
+                    
+                })
+
                 
 
+
             });
+            
             console.log("connected to sockets");
         });
 
-        
+        this.state.socket.on('dummy', t => {
+            console.log("YAS")
+        })
+
 
         await this.getPosts();
     }
+
+
 
     commmentsOnClick = (id) => {
         console.log("Comment of post " + id + " clicked")
@@ -148,33 +161,26 @@ class Dashboard extends Component {
     }
 
     sendTextClicked = () => {
-        let message = document.getElementById("textInp").value;
-        let from = this.props.auth._id;
-        document.getElementById("textInp").value = "";
-        console.log(message);
+        // let message = document.getElementById("textInp").value;
+        // let from = this.props.auth._id;
+        // document.getElementById("textInp").value = "";
+        // console.log(message);
 
-        let textObj = {
-            fromId: this.props.auth._id,
-            fromName: this.props.auth.displayName,
-            toId: this.props.myFriends[0]._id,
-            toName: this.props.myFriends[0].displayName,
-            message: message
-        };
+        // let textObj = {
+        //     fromId: this.props.auth._id,
+        //     fromName: this.props.auth.displayName,
+        //     toId: this.props.myFriends[0]._id,
+        //     toName: this.props.myFriends[0].displayName,
+        //     message: message
+        // };
 
-        this.state.socket.on('connect', (socket) => {
-            this.state.socket.emit('message', textObj);
 
-            this.state.socket.on('message', textObj => {
-                
-                console.log("gotcahaa")
-            })
-        })
-        
 
-        
+
+
     }
 
-   
+
 
     render() {
         return (
@@ -205,7 +211,7 @@ class Dashboard extends Component {
                         <div id="sendText" style={{ display: "flex", flexWrap: "wrap" }}>
 
                             <input id="textInp" type="text" placeholder="Type your text here" />
-                            <MyBtn btnText="send" onClick={this.sendTextClicked} />
+                            <MyBtn btnText="send" id="sendTxtBtn"/>
                         </div>
                     </div>
                 </div>
