@@ -2,18 +2,55 @@ import React, { Component } from 'react';
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
 import socketIoClient from 'socket.io-client';
-import Btn from '../../UI/Button/Button';
+import MyBtn from '../../UI/Button/Button';
+import classes from '../Users/Users.css'
 
 class Chatbox extends Component {
+
+
 
     componentDidMount() {
         this.props.fetchUser();
     }
 
-    render(){
+    userNameClick = () => {
+        console.log("clicked")
+        document.getElementById("chatDiv").style.display = "none";
+    }
+
+    getChatWindow = () => {
+        if (this.props.openChat != null) {
+            return (
+                <div id="chatDiv" className={classes.ChatDiv}>
+                    <div id="displayTexts" className={classes.DisplayTexts}>
+                        <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChat.displayName}</div>
+                    </div>
+
+                    <div id="sendText" className={classes.SendText}>
+                        <input id="textInp" type="text" placeholder="Type your text here" style={{ width: "228px" }} />
+                        <MyBtn btnText="send" id="sendTxtBtn" onClick={this.sendTextClicked} />
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    render() {
         return (
-            <div id={this.props.id} style={{display: "inline-block"}}>
-               Chatbox
+            <div style={{ display: "flex", flexWrap: "flex" }}>
+
+                    {this.getChatWindow()}
+
+                {/* <div id="chatDiv" className={classes.ChatDiv}>
+                    <div id="displayTexts" className={classes.DisplayTexts}>
+                        <div className={classes.Username} onClick={this.userNameClick}>Username</div>
+                    </div>
+
+                    <div id="sendText" className={classes.SendText}>
+                        <input id="textInp" type="text" placeholder="Type your text here" style={{ width: "228px" }} />
+                        <MyBtn btnText="send" id="sendTxtBtn" onClick={this.sendTextClicked} />
+                    </div>
+                </div> */}
             </div>
         )
     }
@@ -110,7 +147,7 @@ export default connect(mapStateToProps, actions)(Chatbox);
         //         displayTexts.appendChild(parentDiv);
         //         displayTexts.scrollTop = displayTexts.scrollHeight;  
         //     });
-            
+
             //Socket event to listen for messages -- end
         //     console.log("connected to sockets");
         // });

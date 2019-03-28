@@ -141,12 +141,14 @@ class Dashboard extends Component {
                     </div> */}
 
                 </div>
-                {this.props.myFriends ? (<div>{this.props.myFriends.length}</div>) : (<div>Fetching</div>)}
+                
                 <div id="chats" className={classes.Chats}>
                     
-                    <Chatbox/>
-                    <Users state={this.state}/>
+                    
+                    <Users/>
                 </div>
+
+                
             </div>
         );
     }
