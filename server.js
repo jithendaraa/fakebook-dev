@@ -52,14 +52,42 @@ io.on('connection', async (socket) => {
   });
 
   let chats = await Chat.find({});
-  // console.log(chats)
-  socket.emit('output', chats);
+  
+  socket.on('output', chatBetween => {
+    // console.log(chats.length)
+    let reqdChats = [];
+    let i;
+    let clientIds = [];
+
+    // chatBetween.map(user => {
+    //   for (i = 0; i < onlineUsers.length; i++) {
+    //     if (onlineUsers[i].userId == user) {
+    //       clientIds.push(user)
+    //     }
+    //   }
+    // });
+    // console.log(clientIds)
+
+    for (i = 0; i < chats.length; i++) {
+      if ((chats[i].fromId == chatBetween[0] && chats[i].toId == chatBetween[1]) || (chats[i].fromId == chatBetween[1] && chats[i].toId == chatBetween[0])) {           //get chats from me to him or from him to me. Index 0 refers to current user
+        reqdChats.push(chats[i])
+      }
+    }
+
+    console.log(reqdChats.length);
+
+    socket.emit('output', reqdChats)
+    // console.log(clientIds);
+    // clientIds.map(clientId => {
+    //   io.to(clientId).emit('output', )
+    // })
+  });
 
 
   //Listen for messages from client side
   socket.on('message', async textObj => {
     console.log("received on server")
-    
+
     let chat = await new Chat({
       fromId: textObj.fromId,
       toId: textObj.toId,
@@ -71,9 +99,9 @@ io.on('connection', async (socket) => {
     let sendToClients = [];
     let i;
     console.log(onlineUsers.length)
-    for(i=0; i<onlineUsers.length; i++){
-      if((onlineUsers[i].userId.toString() == textObj.toId.toString()) || (onlineUsers[i].userId.toString() == textObj.fromId.toString())){
-        if(onlineUsers[i].socketId.toString() !== socket.id.toString()){
+    for (i = 0; i < onlineUsers.length; i++) {
+      if ((onlineUsers[i].userId.toString() == textObj.toId.toString()) || (onlineUsers[i].userId.toString() == textObj.fromId.toString())) {
+        if (onlineUsers[i].socketId.toString() !== socket.id.toString()) {
           sendToClients.push(onlineUsers[i].socketId);
         }
       }
@@ -82,9 +110,9 @@ io.on('connection', async (socket) => {
     sendToClients.map(sendtoClient => {
       console.log(sendtoClient)
       io.to(`${sendtoClient}`).emit('message', textObj);
-    //   socket.broadcast.to(sendtoClient).emit('message', textObj); //sending to individual socketid
+      //   socket.broadcast.to(sendtoClient).emit('message', textObj); //sending to individual socketid
     });
-    
+
 
   });
 
@@ -93,10 +121,10 @@ io.on('connection', async (socket) => {
 
   //Socket Disconnect
   socket.on("disconnect", () => {
-    
+
     let i, pos;
-    for(i=0; i<onlineUsers.length; i++){
-      if(onlineUsers[i].socketId === socket.id){
+    for (i = 0; i < onlineUsers.length; i++) {
+      if (onlineUsers[i].socketId === socket.id) {
         pos = i;
         console.log(onlineUsers.name + " disconnected of socketID" + onlineUsers.socketId);
       }
@@ -104,7 +132,7 @@ io.on('connection', async (socket) => {
     onlineUsers.splice(pos, 1);
     console.log(onlineUsers);
     io.emit('online users', onlineUsers)
-    
+
   });
 });
 

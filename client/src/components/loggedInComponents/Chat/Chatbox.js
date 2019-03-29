@@ -7,23 +7,79 @@ import classes from '../Users/Users.css'
 
 class Chatbox extends Component {
 
+    constructor(props){
+        super(props);
 
+        this.chats = []
+    }
+   
 
     componentDidMount() {
         this.props.fetchUser();
+
+        this.props.socket.on("connect", () => {
+            console.log("socket connected to chatbox " + this.props.socket.id);
+            // console.log(this.props.openChat._id)
+
+            this.props.socket.on("output", chats => {
+                console.log("private chats received");
+                console.log(chats)
+            });
+
+        });
+
+        // this.props.socket.on('output', data => {
+        //     console.log(data)
+        // })
+        // console.log(typeof(this.props.auth._id))
+        
     }
 
     userNameClick = () => {
-        console.log("clicked")
+        console.log("closed")
         document.getElementById("chatDiv").style.display = "none";
     }
 
     getChatWindow = () => {
         if (this.props.openChat != null) {
+
+            // console.log(this.props.openChat)
+            let chatBetween = [];
+            chatBetween.push(this.props.auth._id);
+            chatBetween.push(this.props.openChat._id);
+            // console.log(chatBetween)
+            // this.props.socket.on("connect", () => {
+                
+                this.props.socket.emit('output', chatBetween);
+                console.log("output emitted")
+            // })
+            
+            // console.log(chats)
+            // let i;
+            
+            // for(i=0; i<this.state.chats.length; i++){
+            //     if((this.state.chats[i].fromId == this.props.auth._id) || (this.state.chats[i].toId == this.props.auth._id)){
+            //         // chats.push(this.state.chats[i])
+            //     }
+            // }
+
             return (
                 <div id="chatDiv" className={classes.ChatDiv}>
                     <div id="displayTexts" className={classes.DisplayTexts}>
                         <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChat.displayName}</div>
+                        {console.log(this.chats)}
+                       {
+                            //     <div>
+                            //         {this.chats.reverse().map(chat => {
+                            //         return (
+                            //             <div key={chat._id}>
+                            //                {chat.fromName}: {chat.message}
+                            //             </div>
+                            //         )
+                            //         })}
+                            //     </div>
+                            // )
+                       }  
                     </div>
 
                     <div id="sendText" className={classes.SendText}>
@@ -35,22 +91,19 @@ class Chatbox extends Component {
         }
     }
 
+    sendTextClicked = () => {
+        let textInp = document.getElementById("textInp");
+        let message = textInp.value;
+        console.log(textInp.value);
+        document.getElementById("textInp").value = "";
+    }
+
     render() {
         return (
             <div style={{ display: "flex", flexWrap: "flex" }}>
 
                     {this.getChatWindow()}
 
-                {/* <div id="chatDiv" className={classes.ChatDiv}>
-                    <div id="displayTexts" className={classes.DisplayTexts}>
-                        <div className={classes.Username} onClick={this.userNameClick}>Username</div>
-                    </div>
-
-                    <div id="sendText" className={classes.SendText}>
-                        <input id="textInp" type="text" placeholder="Type your text here" style={{ width: "228px" }} />
-                        <MyBtn btnText="send" id="sendTxtBtn" onClick={this.sendTextClicked} />
-                    </div>
-                </div> */}
             </div>
         )
     }

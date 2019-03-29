@@ -38,7 +38,7 @@ class Dashboard extends Component {
         console.log(id, fetch);
     }
 
-    async componentDidMount() {                                            
+    async componentDidMount() {
         await this.getPosts();
     }
 
@@ -49,7 +49,7 @@ class Dashboard extends Component {
     renderPosts = () => {
         return (
             <div>
-                {this.state.socketId == null ? (<div>sad</div>) : (<div>{this.state.socketId}</div>)}
+               
                 {
                     this.props.dashboardPosts.reverse().map(dashboardPost => {
 
@@ -118,37 +118,18 @@ class Dashboard extends Component {
                         <FrndReqNotifPopper />
                     </div>
                     <div style={{ paddingLeft: "10px" }}>
-                        <MyFriends/>
+                        <MyFriends />
                     </div>
                 </div>
-                <div  style={{ paddingLeft: "30px" }}>
+                <div style={{ paddingLeft: "30px" }}>
                     <ProfilePic />
                     <h4>Dashboard</h4>
-                    {/* {this.checkDashboard()} */}
-                    
-                        
-        
-                    
-                    {/* <div id="chatDiv" className={classes.ChatDiv}>
-                        <div id="displayTexts" className={classes.DisplayTexts}>
-                            <div className={classes.Username}>Username</div>
-                        </div>
-
-                        <div id="sendText" className={classes.SendText}>
-                            <input id="textInp" type="text" placeholder="Type your text here" />
-                            <MyBtn btnText="send" id="sendTxtBtn" onClick={this.sendTextClicked} />
-                        </div>
-                    </div> */}
-
+                    {this.checkDashboard()}
                 </div>
-                
+
                 <div id="chats" className={classes.Chats}>
-                    
-                    
-                    <Users/>
+                    <Users />
                 </div>
-
-                
             </div>
         );
     }

@@ -79,16 +79,13 @@ class Users extends Component {
     render() {
         return (
             <div style={{ display: "flex", flexWrap: "wrap" }}>
-
-               <Chatbox openChat={this.state.openChat}/>
+                {console.log("render time")}
+               <Chatbox openChat={this.state.openChat} socket={this.state.socket}/>
 
                 <div className={classes.UsersWrapDiv}>
                     <b>Online Users</b>
                     {this.props.myFriends != null ? <div>{this.displayMyFriends()}</div> : (<Spinner />)}
                 </div>
-
-
-
             </div>
 
         )
