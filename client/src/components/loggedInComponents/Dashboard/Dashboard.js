@@ -90,25 +90,7 @@ class Dashboard extends Component {
         }
     }
 
-    sendTextClicked = () => {
-        let message = document.getElementById("textInp").value;
-        let from = this.props.auth._id;
-        document.getElementById("textInp").value = "";
-        console.log(message);
-        let dt = document.getElementById("displayTexts");
-        dt.scrollTop = dt.scrollHeight;
 
-        let textObj = {
-            fromId: this.props.auth._id,
-            fromName: this.props.auth.displayName,
-            toId: this.props.myFriends[0]._id,
-            toName: this.props.myFriends[0].displayName,
-            message: message
-        };
-
-        this.state.socket.emit('message', textObj);
-        console.log("sent")
-    }
 
     render() {
         return (

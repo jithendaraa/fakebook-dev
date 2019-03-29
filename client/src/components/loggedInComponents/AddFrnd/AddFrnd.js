@@ -3,12 +3,19 @@ import Header from '../Header';
 import { connect } from 'react-redux';
 import SearchBar from '../../loggedInComponents/SearchBar/SearchBar';
 import * as actions from '../../../actions';
+import classes from './AddFriend.css';
 // import Button from '../../../components/UI/Button/Button';
 import FuzzySearchCard from '../../UI/FuzzySearchcard/FuzzySearchCard';
+import Users from '../Users/Users';
 // import axios from 'axios';
 
 
 class AddFrnd extends Component {
+
+    async componentDidMount() {
+        await this.props.fetchUsers();
+        await this.props.getMyFriends(this.props.auth.myFriends);
+    }
 
     changed = () => {
         const val = document.getElementById("frnds_searchbar").value;
@@ -21,12 +28,12 @@ class AddFrnd extends Component {
 
     searchResults = () => {
 
-            const val = document.getElementById("frnds_searchbar").value;
-            let frndStatusBool = 0;
-            let frndStatus;
-            let frndReqSent = 0;
-            const myFriendsArr = this.props.auth.myFriends;
-            const searchResults = this.props.users.map(user => {
+        const val = document.getElementById("frnds_searchbar").value;
+        let frndStatusBool = 0;
+        let frndStatus;
+        let frndReqSent = 0;
+        const myFriendsArr = this.props.auth.myFriends;
+        const searchResults = this.props.users.map(user => {
             frndStatusBool = 0;
             frndStatus = "Friends";
 
@@ -61,8 +68,8 @@ class AddFrnd extends Component {
                             name={user.displayName}
                             email={user.email}
                             frndStatusBool={frndStatusBool}
-                            frndStatus={frndStatus} 
-                            imgSrc={'/images/'+user.image} />
+                            frndStatus={frndStatus}
+                            imgSrc={'/images/' + user.image} />
                     </center>
                 </div>
             );
@@ -81,6 +88,11 @@ class AddFrnd extends Component {
                     id="frnds_searchbar"
                     changed={this.changed} />
                 {this.props.users !== null ? this.searchResults() : <div>Start searching</div>}
+
+                {this.props.auth !== null ? (<div id="chats" className={classes.Chats}>
+                    <Users />
+                </div>) : null}
+
             </div>
         )
     }
@@ -89,7 +101,8 @@ class AddFrnd extends Component {
 const mapStateToProps = (state) => {
     return {
         users: state.users,
-        auth: state.auth
+        auth: state.auth,
+        myFriends: state.myFriends
     };
 };
 

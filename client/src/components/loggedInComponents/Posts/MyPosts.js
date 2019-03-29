@@ -8,6 +8,8 @@ import SimpleCard from '../../../components/UI/Card/SimpleCard';
 import Header from '../Header';
 import LightSpeed from 'react-reveal/LightSpeed';
 import Spinner from '../../UI/Spinner/Spinner';
+import Users from '../Users/Users';
+import classes from './MyPosts.css';
 
 class MyPosts extends Component {
 
@@ -43,8 +45,10 @@ class MyPosts extends Component {
         this.props.postDislikeClicked(id, userId);
     }
 
-    componentDidMount() {
-        this.props.fetchMyPosts();
+     async componentDidMount() {
+         await this.props.fetchUser();
+         await this.props.getMyFriends(this.props.auth.myFriends);
+         await this.props.fetchMyPosts();
     }
 
     renderMyPosts = () => {
@@ -91,6 +95,10 @@ class MyPosts extends Component {
                 <div style={{ paddingLeft: "30px" }}>
                     {this.renderMyPosts()}
                 </div>
+
+                { this.props.auth !== null ? (<div id="chats" className={classes.Chats}>
+                    <Users />
+                </div>) : null }
             </div>
         );
     }
@@ -99,7 +107,8 @@ class MyPosts extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.auth,
-        posts: state.posts
+        posts: state.posts,
+        myFriends: state.myFriends
     };
 };
 

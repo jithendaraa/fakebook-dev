@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
-import socketIoClient from 'socket.io-client';
+// import socketIoClient from 'socket.io-client';
 import MyBtn from '../../UI/Button/Button';
 import classes from '../Users/Users.css'
 
@@ -81,7 +81,7 @@ class Chatbox extends Component {
 
         this.props.socket.on('message', textObj => {
             this.parentDivChild(textObj);
-            if(textObj.fromId != this.props.auth._id){
+            if(textObj.fromId !== this.props.auth._id){
                 this.playSound();
             }
             
@@ -135,21 +135,28 @@ class Chatbox extends Component {
     sendTextClicked = () => {
         let textInp = document.getElementById("textInp");
         let message = textInp.value;
-        console.log(textInp.value);
         document.getElementById("textInp").value = "";
 
-        let textObj = {
-            fromId: this.props.auth._id,
-            toId: this.props.openChat._id,
-            fromName: this.props.auth.displayName,
-            toName: this.props.openChat.displayName,
-            message: message
-        };
+        if(message.trim() === ""){
+            alert("Type in a text that means something. Dont spam the other user :)")
+        }
+        else{
 
-        this.props.socket.emit('message', textObj);
-        console.log("message sent");
+            let textObj = {
+                fromId: this.props.auth._id,
+                toId: this.props.openChat._id,
+                fromName: this.props.auth.displayName,
+                toName: this.props.openChat.displayName,
+                message: message
+            };
+    
+            this.props.socket.emit('message', textObj);
+            console.log("message sent");
+    
+            this.parentDivChild(textObj);
 
-        this.parentDivChild(textObj);
+        }
+        
 
     }
 
