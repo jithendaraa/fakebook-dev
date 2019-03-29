@@ -19,11 +19,38 @@ class Chatbox extends Component {
 
         this.props.socket.on("connect", () => {
             console.log("socket connected to chatbox " + this.props.socket.id);
-            // console.log(this.props.openChat._id)
+           
+            
 
             this.props.socket.on("output", chats => {
                 console.log("private chats received");
-                console.log(chats)
+                console.log(chats);
+
+                let displayTexts = document.getElementById("displayTexts");
+                document.getElementById("displayTexts").innerHTML = "";
+                if (chats.length > 0) {
+                    chats.map(text => {
+                        let parentDiv = document.createElement("div");
+                        let p = document.createElement("p");
+                        p.innerHTML = text.fromName.split(" ")[0] + ": " + text.message;
+                        p.style.display = "inline-block";
+                        p.style.padding = "2px 5px";
+                        p.style.borderRadius = "10px";
+                        p.style.backgroundColor = "black";
+                        p.style.color = "goldenrod";
+                        p.style.wordBreak = "break-all";
+                        p.style.maxWidth = "200px";
+                        if (text.fromId == this.props.auth._id) {
+                            p.style.backgroundColor = "goldenrod";
+                            p.style.color = "black";
+                            parentDiv.align = "right";
+                            p.style.textAlign = "left";
+                        }
+                        parentDiv.appendChild(p);
+                        displayTexts.appendChild(parentDiv);
+                    });
+                }
+
             });
 
         });
@@ -65,21 +92,9 @@ class Chatbox extends Component {
 
             return (
                 <div id="chatDiv" className={classes.ChatDiv}>
+                    <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChat.displayName}</div> 
                     <div id="displayTexts" className={classes.DisplayTexts}>
-                        <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChat.displayName}</div>
-                        {console.log(this.chats)}
-                       {
-                            //     <div>
-                            //         {this.chats.reverse().map(chat => {
-                            //         return (
-                            //             <div key={chat._id}>
-                            //                {chat.fromName}: {chat.message}
-                            //             </div>
-                            //         )
-                            //         })}
-                            //     </div>
-                            // )
-                       }  
+                        
                     </div>
 
                     <div id="sendText" className={classes.SendText}>
