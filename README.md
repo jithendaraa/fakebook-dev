@@ -12,3 +12,6 @@ A Facebook ripoff using React/Redux and node, express, passport for Google OAuth
 - Viewing My posts
 - Liking and Disliking posts
 - Dashboard shows posts of me and my friends in chronological order
+- Live online status of my friends
+- Fetch and display chat history of a particular friend
+- Open close toggle chat windows
