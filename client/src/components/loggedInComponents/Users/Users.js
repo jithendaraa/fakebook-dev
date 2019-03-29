@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import classes from './Users.css';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-import MyFriends from '../../UI/MyFriends/MyFriends';
+// import MyFriends from '../../UI/MyFriends/MyFriends';
 import Spinner from '../../UI/Spinner/Spinner';
 import socketIoClient from 'socket.io-client';
-import MyBtn from '../../UI/Button/Button';
+// import MyBtn from '../../UI/Button/Button';
 import Chatbox from '../Chat/Chatbox';
 
 class Users extends Component {
@@ -17,10 +17,12 @@ class Users extends Component {
         openChat: null
     }
 
+    
+
     componentDidMount() {
 
         console.log("genuis");
-
+        // this.playSound();
         this.state.socket.on('connect', () => {
             console.log("connected to sockets " + this.state.socket.id);
 
@@ -38,6 +40,8 @@ class Users extends Component {
         })
     }
 
+    
+
     userChatClicked = async(user) => {
         console.log(user._id)
         await this.setState({ openChat: user });
@@ -53,8 +57,6 @@ class Users extends Component {
             onlineId = this.state.onlineUsers[i].userId;
             onlineIds.push(onlineId);
         }
-        console.log(onlineIds)
-
 
         return (
             <div>
@@ -66,7 +68,7 @@ class Users extends Component {
 
                     return (
                         <div key={friend._id} style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }} onClick={() => this.userChatClicked(friend)}>
-                            {onlineBool == 1 ? (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Onlinedot}> </div></div>) : (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Offlinedot}> </div></div>)}
+                            {onlineBool === 1 ? (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Onlinedot}> </div></div>) : (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Offlinedot}> </div></div>)}
                             {friend.displayName}
                         </div>
                     )
@@ -79,7 +81,7 @@ class Users extends Component {
     render() {
         return (
             <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {console.log("render time")}
+               
                <Chatbox openChat={this.state.openChat} socket={this.state.socket}/>
 
                 <div className={classes.UsersWrapDiv}>

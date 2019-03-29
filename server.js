@@ -57,16 +57,6 @@ io.on('connection', async (socket) => {
     // console.log(chats.length)
     let reqdChats = [];
     let i;
-    let clientIds = [];
-
-    // chatBetween.map(user => {
-    //   for (i = 0; i < onlineUsers.length; i++) {
-    //     if (onlineUsers[i].userId == user) {
-    //       clientIds.push(user)
-    //     }
-    //   }
-    // });
-    // console.log(clientIds)
 
     for (i = 0; i < chats.length; i++) {
       if ((chats[i].fromId == chatBetween[0] && chats[i].toId == chatBetween[1]) || (chats[i].fromId == chatBetween[1] && chats[i].toId == chatBetween[0])) {           //get chats from me to him or from him to me. Index 0 refers to current user
@@ -75,18 +65,14 @@ io.on('connection', async (socket) => {
     }
 
     console.log(reqdChats.length);
+    socket.emit('output', reqdChats);
 
-    socket.emit('output', reqdChats)
-    // console.log(clientIds);
-    // clientIds.map(clientId => {
-    //   io.to(clientId).emit('output', )
-    // })
   });
 
 
   //Listen for messages from client side
   socket.on('message', async textObj => {
-    console.log("received on server")
+    console.log("message received ")
 
     let chat = await new Chat({
       fromId: textObj.fromId,
@@ -95,6 +81,7 @@ io.on('connection', async (socket) => {
       toName: textObj.toName,
       message: textObj.message
     }).save();
+
     // io.emit('message', textObj);
     let sendToClients = [];
     let i;
@@ -107,11 +94,32 @@ io.on('connection', async (socket) => {
       }
     }
     console.log(sendToClients)
-    sendToClients.map(sendtoClient => {
-      console.log(sendtoClient)
-      io.to(`${sendtoClient}`).emit('message', textObj);
-      //   socket.broadcast.to(sendtoClient).emit('message', textObj); //sending to individual socketid
+
+    let userIds = [];
+    userIds.push(textObj.fromId);
+    userIds.push(textObj.toId);
+    let socketIds = [];
+
+    userIds.map(userId => {
+      for(i=0; i<onlineUsers.length; i++){
+        if(onlineUsers[i].userId === userId){
+          socketIds.push(onlineUsers[i].socketId);
+        }
+      }
     });
+
+    console.log(socketIds);
+
+    socketIds = socketIds.filter(socketId => {return (socketId != socket.id)})
+
+    socketIds.map(socketId => {
+      io.to(socketId).emit('message', textObj);
+    })
+
+
+    
+    // io.emit("message", textObj)
+    // io.to(`${socketId}`).emit('message', textObj);
 
 
   });
