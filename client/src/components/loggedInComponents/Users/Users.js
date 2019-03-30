@@ -33,21 +33,40 @@ class Users extends Component {
                 socketId: this.state.socket.id
             }
             this.state.socket.emit('online users', connectedUserObj)
-        })
+        });
 
         this.state.socket.on('online users', async onlineUsers => {
             await this.setState({ onlineUsers: onlineUsers });
             console.log(onlineUsers)
-        })
+        });
+
+        this.state.socket.on('message', async textObj => {
+            if(textObj.fromId !== this.props.auth._id){
+                await this.setState ({ 
+                    openChatId: textObj.fromId,
+                    openChatName: textObj.fromName
+                })
+            }
+            else if(textObj.fromId === this.props.auth._id){
+                await this.setState ({ 
+                    openChatId: textObj.toId,
+                    openChatName: textObj.toName
+                })
+            }
+            
+        }) 
     }
 
     
-
     userChatClicked = async(user) => {
         // console.log(user._id)
         await this.setState({ openChatId: user._id, openChatName: user.displayName });
-        console.log("done");
-        document.getElementById("chatDiv").style.display = "block";
+        console.log(this.state.openChatName);
+        if(document.getElementById("chatDiv") !== null ){
+            console.log("not null")
+            document.getElementById("chatDiv").style.display = "block";
+        }
+       
     }
 
     displayMyFriends = () => {
@@ -84,7 +103,7 @@ class Users extends Component {
             <div style={{ display: "flex", flexWrap: "wrap" }}>
                
                <Chatbox openChatId={this.state.openChatId} openChatName={this.state.openChatName} socket={this.state.socket}/>
-
+               {console.log("rerendering")} 
                 <div className={classes.UsersWrapDiv}>
                     <b>Online Users</b>
                     {this.props.myFriends != null ? <div>{this.displayMyFriends()}</div> : (<Spinner />)}
