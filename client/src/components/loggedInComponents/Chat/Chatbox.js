@@ -81,6 +81,12 @@ class Chatbox extends Component {
                         case 4:
                             this.parentDivChild(this.textObj);
                             this.textObj = 0;
+                            this.playSound();
+                            return;
+                        case 6:
+                            this.parentDivChild(this.textObj);
+                            this.textObj = 0;
+                            this.playSound();
                             return;
                         default: 
                             return;
@@ -126,17 +132,25 @@ class Chatbox extends Component {
 
             else{                                                                           // message from someone -- client 1 to client 2
                 if( this.props.openChatId === null ){
+                    console.log("case 4")
                     this.textObj = textObj;
                     this.case = 4;
                 }
-                else if((this.props.openChat !== null) && (this.props.openChat == textObj.fromId)){
+                else if((this.props.openChat !== null) && (this.props.openChatId === textObj.fromId)){
                     
                     document.getElementById("chatDiv").style.display = "block";
                     console.log("case 5");
                     this.textObj = textObj;
+                    this.playSound();
 
                     this.parentDivChild(this.textObj);
-
+                }
+                else if((this.props.openChat !== null) && (this.props.openChatId !== textObj.fromId)){
+                    
+                    document.getElementById("chatDiv").style.display = "block";
+                    console.log("case 6");
+                    this.case = 6;
+                    this.textObj = textObj;
                 }
             }
             
