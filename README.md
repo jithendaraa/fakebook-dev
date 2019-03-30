@@ -16,3 +16,4 @@ A Facebook ripoff using React/Redux and node, express, passport for Google OAuth
 - Live private chat established
 - Fetch and display chat history of a particular friend
 - Open close toggle chat windows
+- Live private chat across /newPost, /addFrnd, /myPosts
