@@ -25,6 +25,7 @@ module.exports = (app) => {
     });
 
     app.get('/api/uploadPic', async (req, res) => {
+        console.log("getting image")
         let user = await User.findOne({ _id: req.user.id });
         res.send(user.image);
     }); 

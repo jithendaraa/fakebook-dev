@@ -74,6 +74,10 @@ class Chatbox extends Component {
                             this.parentDivChild(this.textObj);
                             this.textObj = 0;
                             return;
+                        case 3:
+                            this.parentDivChild(this.textObj);
+                            this.textObj = 0;
+                            return;
                         case 4:
                             this.parentDivChild(this.textObj);
                             this.textObj = 0;
@@ -89,12 +93,6 @@ class Chatbox extends Component {
 
         this.props.socket.on('message', async textObj => {
 
-            console.log(typeof(this.props.openChatId), typeof(this.props.auth._id))
-            console.log()
-            // if(document.getElementById("chatDiv") !== null){                            //to make sure chatDiv is seen if it exists
-            //         document.getElementById("chatDiv").style.display = "block";
-            // }
-
 
             if(textObj.fromId === this.props.openChatId){                                //concerned chat windows are open already
                 this.parentDivChild(textObj);
@@ -102,23 +100,7 @@ class Chatbox extends Component {
             }
 
             console.log("message rec")
-            // if(textObj.fromId !== this.props.auth._id){                //If message is not from myself and no window is open
-            //     if(this.props.openChatId === null){
-            //         this.textObj = textObj;
-            //     }
-            //     else if (this.props.openChatId !== null){
-            //         // this.parentDivChild(textObj);
-            //         console.log("htinc")     
-            //         if(this.props.openChatId === textObj.fromId){
-            //             this.parentDivChild(textObj);
-            //         }
-            //         else{
-            //             this.textObj = textObj;
-            //         }
-                    
-            //     }
-                
-            // }
+           
 
             if(textObj.fromId === this.props.auth._id){                                       //messsage from myself -- in duplicate client
                 if( this.props.openChatId === null ){
@@ -129,10 +111,16 @@ class Chatbox extends Component {
                 else if((this.props.openChatId !== null) && (textObj.fromId === this.props.auth._id) && (this.props.openChatId === textObj.toId)){
                     
                     document.getElementById("chatDiv").style.display = "block";
-                    console.log("case 3 af")
+                    console.log("case 2")
                     this.textObj = textObj;
                     
                     this.parentDivChild(this.textObj);
+                }
+                else if((this.props.openChatId !== null) && (this.props.openChatId !== textObj.toId))
+                {
+                    console.log("case 3")
+                    this.case = 3;
+                    this.textObj = textObj;
                 }
             }
 
@@ -140,6 +128,15 @@ class Chatbox extends Component {
                 if( this.props.openChatId === null ){
                     this.textObj = textObj;
                     this.case = 4;
+                }
+                else if((this.props.openChat !== null) && (this.props.openChat == textObj.fromId)){
+                    
+                    document.getElementById("chatDiv").style.display = "block";
+                    console.log("case 5");
+                    this.textObj = textObj;
+
+                    this.parentDivChild(this.textObj);
+
                 }
             }
             
@@ -221,7 +218,7 @@ class Chatbox extends Component {
     render() {
         return (
             <div style={{ display: "flex", flexWrap: "flex" }}>
-
+                {console.log("rerendered")}
                 {this.getChatWindow()}
 
             </div>
