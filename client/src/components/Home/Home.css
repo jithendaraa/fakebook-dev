@@ -1,5 +1,5 @@
 .header{
-    color: black;
+    color: goldenrod;
     float: left;
     /* padding-top: 15px; */
     margin: 15px 15px;
@@ -34,8 +34,8 @@
 
 .pageContent{
     /* width: 50%; */
-    background-color: rgb(96, 117, 165);
-    color: black;
+    /* background-color: rgb(96, 117, 165); */
+    color: white;
     /* padding-right: 50%; */
     padding-left: 5%;
     float: left;
