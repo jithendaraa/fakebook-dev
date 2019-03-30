@@ -8,10 +8,10 @@ import SimpleCard from '../../UI/Card/SimpleCard';
 import MyFriends from '../../UI/MyFriends/MyFriends';
 import classes from './Dashboard.css';
 import Spinner from '../../UI/Spinner/Spinner';
-import socketIoClient from 'socket.io-client';
-import { Button } from '@material-ui/core';
-import MyBtn from '../../UI/Button/Button';
-import Chatbox from '../Chat/Chatbox';
+// import socketIoClient from 'socket.io-client';
+// import { Button } from '@material-ui/core';
+// import MyBtn from '../../UI/Button/Button';
+// import Chatbox from '../Chat/Chatbox';
 import Users from '../Users/Users'
 
 
@@ -40,6 +40,7 @@ class Dashboard extends Component {
 
     async componentDidMount() {
         await this.getPosts();
+        console.log(this.props.dashboardPosts[0])
     }
 
     commmentsOnClick = (id) => {
@@ -79,7 +80,7 @@ class Dashboard extends Component {
     checkDashboard() {
         if (this.props.dashboardPosts) {
             if (this.props.dashboardPosts.length === 0) {
-                return (<div>No posts to display</div>)
+                return (<div style={{color: "white"}}>No posts to display</div>)
             }
             else if (this.props.dashboardPosts.length >= 1) {
                 return this.renderPosts();
@@ -98,6 +99,7 @@ class Dashboard extends Component {
                 <div className={classes.Header}>
                     <div>
                         <FrndReqNotifPopper />
+                        {console.log(23)}
                     </div>
                     <div style={{ paddingLeft: "10px" }}>
                         <MyFriends />
@@ -105,7 +107,7 @@ class Dashboard extends Component {
                 </div>
                 <div style={{ paddingLeft: "30px" }}>
                     <ProfilePic />
-                    <h4>Dashboard</h4>
+                    <h4 style={{color: "white"}}>Dashboard</h4>
                     {this.checkDashboard()}
                 </div>
 

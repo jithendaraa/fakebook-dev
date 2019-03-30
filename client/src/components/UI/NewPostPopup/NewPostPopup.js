@@ -7,7 +7,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import MyButton from '../Button/Button';
-import TextArea from '../TextArea/TextArea'
+import TextArea from '../TextArea/TextArea';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import * as actions from '../../../actions';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -18,6 +21,11 @@ class NewPostPopup extends React.Component {
     open: false,
   };
 
+  async componentDidMount() {
+    await this.props.fetchUser();
+    await this.props.getMyFriends(this.props.auth.myFriends);
+}
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -25,6 +33,13 @@ class NewPostPopup extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  async submitPost() {
+    const post = document.getElementById("newPostInput").value;
+    await axios.post('/api/posts', {post});
+    window.location.href = "/";
+    console.log("posted");
+}
 
   render() {
     return (
@@ -72,4 +87,11 @@ class NewPostPopup extends React.Component {
   }
 }
 
-export default NewPostPopup;
+const mapStateToProps = state => {
+  return { 
+    auth: state.auth,
+    myFriends: state.myFriends 
+  }
+}
+
+export default connect(mapStateToProps, actions)(NewPostPopup);
