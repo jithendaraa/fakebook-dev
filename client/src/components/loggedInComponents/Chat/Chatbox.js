@@ -15,6 +15,7 @@ class Chatbox extends Component {
         super(props);
 
         this.textObj = 0;
+        this.case = 0;
     }
 
     playSound = () => {
@@ -65,58 +66,83 @@ class Chatbox extends Component {
                     });
                     console.log("i rerendered the chats after clearing the div")
                 }
+                //
                 if(this.textObj !== 0){
-                    this.parentDivChild(this.textObj);
-                    this.playSound();
-                    this.textObj = 0;
-                }
+                    console.log(this.case)
+                    switch(this.case){
+                        case 1:
+                            this.parentDivChild(this.textObj);
+                            this.textObj = 0;
+                            return;
+                        case 4:
+                            this.parentDivChild(this.textObj);
+                            this.textObj = 0;
+                            return;
+                        default: 
+                            return;
+                    }
+                } 
+               
             });
 
         });
 
         this.props.socket.on('message', async textObj => {
 
-            
+            console.log(typeof(this.props.openChatId), typeof(this.props.auth._id))
+            console.log()
+            // if(document.getElementById("chatDiv") !== null){                            //to make sure chatDiv is seen if it exists
+            //         document.getElementById("chatDiv").style.display = "block";
+            // }
 
-            if(document.getElementById("chatDiv") !== null){                            //to make sure chatDiv is seen if it exists
-                    document.getElementById("chatDiv").style.display = "block";
-            }
 
-
-            if(textObj.fromId == this.props.openChatId){                                //concerned chat windows are open already
+            if(textObj.fromId === this.props.openChatId){                                //concerned chat windows are open already
                 this.parentDivChild(textObj);
-                this.playSound()
+                this.playSound();
             }
 
-            // this.parentDivChild(textObj);
-            if((textObj.fromId !== this.props.auth._id) && (this.props.openChatId == null)){                                  //If message is not from myself and no window is open
-                this.textObj = textObj
+            console.log("message rec")
+            // if(textObj.fromId !== this.props.auth._id){                //If message is not from myself and no window is open
+            //     if(this.props.openChatId === null){
+            //         this.textObj = textObj;
+            //     }
+            //     else if (this.props.openChatId !== null){
+            //         // this.parentDivChild(textObj);
+            //         console.log("htinc")     
+            //         if(this.props.openChatId === textObj.fromId){
+            //             this.parentDivChild(textObj);
+            //         }
+            //         else{
+            //             this.textObj = textObj;
+            //         }
+                    
+            //     }
+                
+            // }
+
+            if(textObj.fromId === this.props.auth._id){                                       //messsage from myself -- in duplicate client
+                if( this.props.openChatId === null ){
+                    this.textObj = textObj;
+                    this.case = 1;
+                    console.log("case 1")
+                }
+                else if((this.props.openChatId !== null) && (textObj.fromId === this.props.auth._id) && (this.props.openChatId === textObj.toId)){
+                    
+                    document.getElementById("chatDiv").style.display = "block";
+                    console.log("case 3 af")
+                    this.textObj = textObj;
+                    
+                    this.parentDivChild(this.textObj);
+                }
             }
-            //     let chatBetween = [];
-            //     chatBetween.push(this.props.auth._id);
-            //     chatBetween.push(this.props.openChatId);
-            //     document.getElementById("username").innerHTML = textObj.fromName;
-                
-            //     this.props.socket.emit("output", chatBetween);
-            //     this.parentDivChild(textObj);
 
-            //     this.playSound();
-
-            // }
-            // else if(textObj.fromId !== this.props.auth._id){                              //Message is from myself ie for duplicate user client logged into the saame id
-                
-            //     let chatBetween = [];
-            //     chatBetween.push(this.props.auth._id);
-            //     chatBetween.push(this.props.openChatId);
-            //     document.getElementById("username").innerHTML = textObj.toName;
-            //     document.getElementById("displayTexts").innerHTML = "";
-            //     this.props.socket.emit("output", chatBetween);
-            //     this.parentDivChild(textObj);
-            // }
-
-            // else{
-            //     this.parentDivChild(textObj);
-            // }
+            else{                                                                           // message from someone -- client 1 to client 2
+                if( this.props.openChatId === null ){
+                    this.textObj = textObj;
+                    this.case = 4;
+                }
+            }
+            
             
         })
 
