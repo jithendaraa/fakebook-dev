@@ -27,16 +27,6 @@ class Chatbox extends Component {
         let dpThisUser = document.createElement("img");
         let dpThatUser = document.createElement("img");
 
-        dpThatUser.src = "images/" + this.props.openChat.image;
-        dpThisUser.src = "images/" + this.props.auth.image;
-
-        dpThisUser.style.width = "20px";
-        dpThisUser.style.height = "20px";
-        dpThisUser.style.borderRadius = "10px";
-
-        dpThisUser.style.width = "20px";
-        dpThisUser.style.height = "20px";
-        dpThisUser.style.borderRadius = "10px";
         
         let p = document.createElement("p");
         p.innerHTML = textObj.fromName.split(" ")[0] + ": " + textObj.message;
@@ -102,18 +92,18 @@ class Chatbox extends Component {
     }
 
     getChatWindow = () => {
-        if (this.props.openChat != null) {
+        if (this.props.openChatId != null) {
 
             let chatBetween = [];
             chatBetween.push(this.props.auth._id);
-            chatBetween.push(this.props.openChat._id);
+            chatBetween.push(this.props.openChatId);
 
             this.props.socket.emit('output', chatBetween);
             console.log("output emitted")
 
             return (
                 <div id="chatDiv" className={classes.ChatDiv}>
-                    <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChat.displayName}</div>
+                    <div className={classes.Username} onClick={this.userNameClick}>{this.props.openChatName}</div>
                     <div id="displayTexts" className={classes.DisplayTexts}></div>
 
                     <div id="sendText" className={classes.SendText}>
@@ -144,9 +134,9 @@ class Chatbox extends Component {
 
             let textObj = {
                 fromId: this.props.auth._id,
-                toId: this.props.openChat._id,
+                toId: this.props.openChatId,
                 fromName: this.props.auth.displayName,
-                toName: this.props.openChat.displayName,
+                toName: this.props.openChatName,
                 message: message
             };
     
@@ -176,6 +166,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, actions)(Chatbox);
-
-
-       

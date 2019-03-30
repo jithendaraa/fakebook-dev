@@ -14,7 +14,8 @@ class Users extends Component {
         socket: socketIoClient('http://localhost:5000'),
         chats: null,
         onlineUsers: [],
-        openChat: null
+        openChatId: null,
+        openChatName: null
     }
 
     
@@ -43,8 +44,8 @@ class Users extends Component {
     
 
     userChatClicked = async(user) => {
-        console.log(user._id)
-        await this.setState({ openChat: user });
+        // console.log(user._id)
+        await this.setState({ openChatId: user._id, openChatName: user.displayName });
         console.log("done");
         document.getElementById("chatDiv").style.display = "block";
     }
@@ -82,7 +83,7 @@ class Users extends Component {
         return (
             <div style={{ display: "flex", flexWrap: "wrap" }}>
                
-               <Chatbox openChat={this.state.openChat} socket={this.state.socket}/>
+               <Chatbox openChatId={this.state.openChatId} openChatName={this.state.openChatName} socket={this.state.socket}/>
 
                 <div className={classes.UsersWrapDiv}>
                     <b>Online Users</b>
@@ -101,4 +102,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, actions)(Users);
+export default connect(mapStateToProps, actions)(Users);    
