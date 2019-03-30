@@ -51,10 +51,10 @@ io.on('connection', async (socket) => {
     io.emit('online users', onlineUsers);
   });
 
-  let chats = await Chat.find({});
   
-  socket.on('output', chatBetween => {
-    // console.log(chats.length)
+  let chats = await Chat.find({});
+  socket.on('output', async chatBetween => {
+    
     let reqdChats = [];
     let i;
 
