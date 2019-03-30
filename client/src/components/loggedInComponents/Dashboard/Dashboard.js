@@ -99,7 +99,7 @@ class Dashboard extends Component {
                 <div className={classes.Header}>
                     <div>
                         <FrndReqNotifPopper />
-                        {console.log(23)}
+                    
                     </div>
                     <div style={{ paddingLeft: "10px" }}>
                         <MyFriends />

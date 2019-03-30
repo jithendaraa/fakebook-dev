@@ -132,7 +132,7 @@ class Users extends Component {
             <div style={{ display: "flex", flexWrap: "wrap" }}>
 
                 <Chatbox openChatId={this.state.openChatId} openChatName={this.state.openChatName} socket={this.state.socket} />
-                {console.log("rerendering")}
+                
                 <div className={classes.UsersWrapDiv}>
                     <b>Online Users</b>
                     {this.props.myFriends != null ? <div>{this.displayMyFriends()}</div> : (<Spinner />)}

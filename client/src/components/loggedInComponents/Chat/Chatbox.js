@@ -233,7 +233,7 @@ class Chatbox extends Component {
     render() {
         return (
             <div style={{ display: "flex", flexWrap: "flex" }}>
-                {console.log("rerendered")}
+                
                 {this.getChatWindow()}
 
             </div>

@@ -4,14 +4,18 @@ import * as actions from '../../../actions';
 
 class Pictionary extends Component {
 
-    async componentDidMount(){
-        await this.props.fetchUser();
+    
+
+    heading = () => {
+        console.log(this.props.auth)
     }
+
+    
     render(){
         return(
-            <div>
-                <center><h2>Hello</h2></center>
-                Pictionary
+            <div style={{color: "white"}}>
+                <center>{this.props.auth === null ? null : (<h2>Welcome to live Pictionary, {this.props.auth.displayName.split(" ")[0]}</h2>)}</center>
+                
             </div>
         )
     }
