@@ -44,7 +44,7 @@ class ProfilePic extends Component {
                 {this.profilePic()}
                 <div id="space" style={{width: "30px"}}>
                 </div>
-                <div style={{paddingTop: '20px'}}>
+                <div style={{paddingTop: '20px', color: "white"}}>
                     <h2>{this.displayName()}<b>{this.email()}</b></h2>          
                 </div>
             </div>

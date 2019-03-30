@@ -140,10 +140,11 @@ class Chatbox extends Component {
                     
                     document.getElementById("chatDiv").style.display = "block";
                     console.log("case 5");
-                    this.textObj = textObj;
+                    // this.textObj = textObj;
+                    this.case = 5;
                     this.playSound();
 
-                    this.parentDivChild(this.textObj);
+                    // this.parentDivChild(this.textObj);
                 }
                 else if((this.props.openChat !== null) && (this.props.openChatId !== textObj.fromId)){
                     

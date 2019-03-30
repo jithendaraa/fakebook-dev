@@ -2,7 +2,7 @@
     width: 130px;
     height: 130px;
     border-radius: 70px;
-    transition: 0.5s;
+    transition: 1s;
     filter: grayscale(100%);
     cursor: pointer;
 }
@@ -10,7 +10,7 @@
 .Dp:hover{
     border-radius: 0px;
     filter: grayscale(0%);
-    transition: 0.5s;
+    transition: 1s;
 }
 
 .DpDiv{

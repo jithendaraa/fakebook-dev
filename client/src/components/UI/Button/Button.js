@@ -19,11 +19,12 @@ const button = (props) => {
         <Aux>
             <a href={props.href} style={aStyle}>
                 <Button
+
                     id={props.id}
                     type={props.type}
                     variant="contained"
                     color="primary"
-                    style={{ width: props.width, height: props.height, fontSize: props.fontSize }}
+                    style={{ width: props.width, height: props.height, fontSize: props.fontSize, paddingBottom: props.paddingBottom, backgroundColor: "black" }}
                     onClick={props.onClick}>{props.btnText}</Button>
             </a>
         </Aux>

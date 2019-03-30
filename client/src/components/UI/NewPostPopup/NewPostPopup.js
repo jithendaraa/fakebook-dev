@@ -7,12 +7,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import MyButton from '../Button/Button';
+import TextArea from '../TextArea/TextArea'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class NewStoryPopup extends React.Component {
+class NewPostPopup extends React.Component {
   state = {
     open: false,
   };
@@ -28,10 +29,9 @@ class NewStoryPopup extends React.Component {
   render() {
     return (
       <div>
-        {/* <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          + New Story
-        </Button> */}
-        <MyButton onClick={this.handleClickOpen} btnText="+ New Story" />
+        <MyButton onClick={this.handleClickOpen} btnText="+ New Post" />
+  
+        
         <Dialog
           open={this.state.open}
           TransitionComponent={Transition}
@@ -41,19 +41,29 @@ class NewStoryPopup extends React.Component {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            {"Upload a new story"}
+            New Post
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Stuff here to upload new story
+            <TextArea
+                                placeholder="Type Something here"
+                                type="text"
+                                id="newPostInput"
+                                name="postt"
+                                width="400px"
+                                height="200px" />
+                            
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Upload
+            <Button 
+                type="submit" 
+                btnText="Post" 
+                onClick={this.submitPost}>
+              Post
             </Button>
           </DialogActions>
         </Dialog>
@@ -62,4 +72,4 @@ class NewStoryPopup extends React.Component {
   }
 }
 
-export default NewStoryPopup;
+export default NewPostPopup;

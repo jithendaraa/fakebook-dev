@@ -5,7 +5,7 @@ import * as actions from '../../../actions';
 // import MyFriends from '../../UI/MyFriends/MyFriends';
 import Spinner from '../../UI/Spinner/Spinner';
 import socketIoClient from 'socket.io-client';
-// import MyBtn from '../../UI/Button/Button';
+import MyBtn from '../../UI/Button/Button';
 import Chatbox from '../Chat/Chatbox';
 
 class Users extends Component {
@@ -88,7 +88,6 @@ class Users extends Component {
         await this.setState({ openChatId: user._id, openChatName: user.displayName });
         console.log(this.state.openChatName);
         if (document.getElementById("chatDiv") !== null) {
-            console.log("not null")
             document.getElementById("chatDiv").style.display = "block";
         }
 
@@ -113,8 +112,13 @@ class Users extends Component {
 
                     return (
                         <div key={friend._id} style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }} onClick={() => this.userChatClicked(friend)}>
-                            {onlineBool === 1 ? (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Onlinedot}> </div></div>) : (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Offlinedot}> </div></div>)}
-                            {friend.displayName}
+                            <div style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }}>
+                                {onlineBool === 1 ? (<div style={{ paddingTop: "10px", paddingRight: "3px" }}><div className={classes.Onlinedot}> </div></div>) : (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Offlinedot}> </div></div>)}
+                                <div style={{paddingTop: "4px"}}>{friend.displayName}</div>
+                                {onlineBool === 1 ? (<MyBtn btnText="Pictionary" height="30px" fontSize="12px" paddingBottom="10px"/>) : null}
+                            </div>
+                            
+                            
                         </div>
                     )
                 })}

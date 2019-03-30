@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 
 import Signup from './components/Authentications/Signup/Signup';
 import Signin from './components/Authentications/Signin/Signin';
-import NewPost from './components/loggedInComponents/NewPost/NewPost';
+import NewPost from './components/UI/NewPostPopup/NewPostPopup';
 import NewStory from './components/loggedInComponents/NewStory/NewStory';
 import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
 import Home from './components/Home/Home';
 import MyPosts from './components/loggedInComponents/Posts/MyPosts';
 import Chat from './components/loggedInComponents/Chat/Chat';
-
+import Pictionary from './components/loggedInComponents/Pictionary/Pictionary.js';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
@@ -31,6 +31,7 @@ class App extends Component {
         <Route path="/myPosts" exact component={MyPosts}></Route>
         <Route path="/newStory" component={NewStory}></Route>
         <Route path="/addFrnd" component={AddFrnd}></Route>
+        <Route path="/pictionary" component={Pictionary}></Route>
       </div>
     );
   }
