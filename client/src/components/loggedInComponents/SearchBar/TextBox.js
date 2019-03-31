@@ -46,6 +46,7 @@ class TextFields extends React.Component {
                 <TextField
                     onChange={this.props.changed}
                     id={this.props.id}
+                    style={{color: "white"}}
                     // label={lol}
                     className={classNames(classes.textField, classes.dense)}
                     margin="dense"

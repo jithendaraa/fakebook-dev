@@ -1,0 +1,98 @@
+.Black{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: black;
+    
+    cursor: pointer;
+}
+
+.White{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: white;
+    
+    cursor: pointer;
+}
+
+.Red{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: red;
+    
+    cursor: pointer;
+}
+
+.Green{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: green;
+    
+    cursor: pointer;
+}
+
+.Blue{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: blue;
+    
+    cursor: pointer;
+}
+
+.Yellow{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: yellow;
+    
+    cursor: pointer;
+}
+
+
+.Black:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+.White:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+.Red:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+.Green:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+.Blue:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+.Yellow:hover{
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    
+}
+
+
