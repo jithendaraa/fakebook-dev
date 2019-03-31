@@ -42,6 +42,11 @@ let server = http.Server(app)
 let io = socketIo(server);
 
 let onlineUsers = [];
+let reqBy = {                                           //Pictionary req details variable
+  userId: null,
+  socketId: null,
+  userName: null
+};
 
 io.on('connection', async (socket) => {
   console.log("New client connected with socket ID: " + socket.id);
@@ -51,10 +56,10 @@ io.on('connection', async (socket) => {
     io.emit('online users', onlineUsers);
   });
 
-  
+
   let chats = await Chat.find({});
   socket.on('output', async chatBetween => {
-    
+
     let reqdChats = [];
     let i;
 
@@ -69,7 +74,6 @@ io.on('connection', async (socket) => {
 
   });
 
-
   //Listen for messages from client side
   socket.on('message', async textObj => {
     console.log("message received ")
@@ -82,7 +86,6 @@ io.on('connection', async (socket) => {
       message: textObj.message
     }).save();
 
-    // io.emit('message', textObj);
     let sendToClients = [];
     let i;
     console.log(onlineUsers.length)
@@ -94,34 +97,76 @@ io.on('connection', async (socket) => {
       }
     }
     console.log(sendToClients)
-
     let userIds = [];
     userIds.push(textObj.fromId);
     userIds.push(textObj.toId);
     let socketIds = [];
-
     userIds.map(userId => {
-      for(i=0; i<onlineUsers.length; i++){
-        if(onlineUsers[i].userId === userId){
+      for (i = 0; i < onlineUsers.length; i++) {
+        if (onlineUsers[i].userId === userId) {
           socketIds.push(onlineUsers[i].socketId);
         }
       }
     });
-
     console.log(socketIds);
-
-    socketIds = socketIds.filter(socketId => {return (socketId != socket.id)})
-
+    socketIds = socketIds.filter(socketId => { return (socketId != socket.id) })
     socketIds.map(socketId => {
       io.to(socketId).emit('message', textObj);
     })
+  });
 
 
-    
-    // io.emit("message", textObj)
-    // io.to(`${socketId}`).emit('message', textObj);
+  socket.on('playReq', data => {
+    console.log("Play request");
+    let reqdSocketIds = [];
+    let i;
+    for (i=0; i<onlineUsers.length; i++){
+      if(onlineUsers[i].userId === data.toUserId){
+        reqdSocketIds.push(onlineUsers[i].socketId);
+      }
+    }
+    let res = {
+      ...data,
+      socketIds: reqdSocketIds
+    };
+    reqBy = {
+      userId: data.fromUserId,
+      userName: data.fromUserName,
+      socketId: data.fromSocketId
+    };
+    reqdSocketIds.map(socketId => {
+      io.to(socketId).emit('playReq', res);
+    });
+  });
+
+  socket.on('cancelReq', data => {
+    console.log("cancel req")
+    let reqdSocketIds = [];
+    let i;
+    for (i=0; i<onlineUsers.length; i++){
+      if(onlineUsers[i].userId === data.toUserId){
+        reqdSocketIds.push(onlineUsers[i].socketId);
+      }
+    }
+    reqBy = {
+      userId: null,
+      userName: null,
+      socketId: null
+    };
+    reqdSocketIds.map(socketId => {
+      io.to(socketId).emit('cancelReq');
+    });
+  });
 
 
+  socket.on('acceptReq', data => {
+    let socketIds = [];
+    socketIds.push(data.reqFromSocketId);
+    socketIds.push(data.reqToSocketId);
+
+    socketIds.map(socketId => {
+      io.to(socketId).emit('acceptReq', data);
+    });
   });
 
 

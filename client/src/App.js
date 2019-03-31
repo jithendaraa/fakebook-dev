@@ -7,7 +7,6 @@ import NewStory from './components/loggedInComponents/NewStory/NewStory';
 import AddFrnd from './components/loggedInComponents/AddFrnd/AddFrnd';
 import Home from './components/Home/Home';
 import MyPosts from './components/loggedInComponents/Posts/MyPosts';
-import Chat from './components/loggedInComponents/Chat/Chat';
 import Pictionary from './components/loggedInComponents/Pictionary/Pictionary.js';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';

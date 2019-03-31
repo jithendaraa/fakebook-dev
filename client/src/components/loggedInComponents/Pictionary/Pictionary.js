@@ -83,17 +83,11 @@ class Pictionary extends Component {
     }
 
 
-
-    heading = () => {
-        console.log(this.props.auth)
-    }
-
-
     render() {
         return (
             <div style={{ color: "white" }}>
 
-                {this.props.auth === null ? null : (<h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, {this.props.auth.displayName.split(" ")[0]}</h2>)}
+                {/* {this.props.auth === null ? null : (<h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, {this.props.auth.displayName.split(" ")[0]}</h2>)} */}
 
                 <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary</h2>
 
@@ -106,14 +100,13 @@ class Pictionary extends Component {
                     <div>
                         <div style={{ display: "flex", flexWrap: "wrap" }}>
                             <canvas id="gameboardCanvas" width="700" height="500" style={{ border: "1px solid white", borderRadius: "5px", backgroundColor: "white" }}></canvas>
-                            <div style={{
+                            <div id="colorSelector" style={{
                                 height: "150px",
                                 paddingLeft: "5px",
                                 display: "flex",
                                 flexWrap: "wrap",
                                 flexDirection: "column",
                                 justifyContent: "space-between",
-
                             }}>
                                 <div id="black" className={classes.Black} onClick={() => { this.colorSelect('black') }}></div>
                                 <div id="white" className={classes.White} onClick={() => { this.colorSelect('white') }}></div>

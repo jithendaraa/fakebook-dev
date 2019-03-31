@@ -7,6 +7,8 @@ import Spinner from '../../UI/Spinner/Spinner';
 import socketIoClient from 'socket.io-client';
 import MyBtn from '../../UI/Button/Button';
 import Chatbox from '../Chat/Chatbox';
+import PictionaryBtn from '../../UI/PictionaryReqPopup/PictionaryReqPopup';
+import PictionaryReqPopup from '../../UI/PictionaryReqPopup/PictionaryReqPopup';
 
 class Users extends Component {
 
@@ -17,7 +19,6 @@ class Users extends Component {
         openChatId: null,
         openChatName: null
     }
-
 
     parentDivChild = textObj => {
         let displayTexts = document.getElementById("displayTexts");
@@ -47,8 +48,6 @@ class Users extends Component {
 
 
     componentDidMount() {
-
-       
         this.state.socket.on('connect', () => {
             console.log("connected to sockets " + this.state.socket.id);
 
@@ -79,12 +78,18 @@ class Users extends Component {
                     openChatName: textObj.toName
                 })
             }
-        })
+        });
+
+        this.state.socket.on('playReq', res => {
+            // console.log(res);
+            let users = document.getElementById('users');
+            
+
+        });
     }
 
 
     userChatClicked = async (user) => {
-        // console.log(user._id)
         await this.setState({ openChatId: user._id, openChatName: user.displayName });
         console.log(this.state.openChatName);
         if (document.getElementById("chatDiv") !== null) {
@@ -92,6 +97,8 @@ class Users extends Component {
         }
 
     }
+
+    
 
     displayMyFriends = () => {
 
@@ -111,25 +118,25 @@ class Users extends Component {
                     }
 
                     return (
-                        <div key={friend._id} style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }} onClick={() => this.userChatClicked(friend)}>
+                        <div key={friend._id} style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }} >
                             <div style={{ display: "flex", flexWrap: "wrap", cursor: "pointer" }}>
                                 {onlineBool === 1 ? (<div style={{ paddingTop: "10px", paddingRight: "3px" }}><div className={classes.Onlinedot}> </div></div>) : (<div style={{ paddingTop: "6px", paddingRight: "3px" }}><div className={classes.Offlinedot}> </div></div>)}
-                                <div style={{paddingTop: "4px"}}>{friend.displayName}</div>
-                                {onlineBool === 1 ? (<MyBtn btnText="Pictionary" height="30px" fontSize="12px" paddingBottom="10px"/>) : null}
+                                <div style={{paddingTop: "4px"}} onClick={() => this.userChatClicked(friend)}>{friend.displayName}</div>
+                                {onlineBool === 1 ? 
+                                    // (<MyBtn btnText="Pictionary" height="30px" fontSize="12px" paddingBottom="10px" onClick={() => {this.PictionaryReq(friend)}}/>) : 
+                                    <PictionaryReqPopup socket={this.state.socket} friend={friend}/> :
+                                    null}
                             </div>
-                            
-                            
                         </div>
                     )
                 })}
             </div>
         )
-
     }
 
     render() {
         return (
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div id="users" style={{ display: "flex", flexWrap: "wrap" }}>
 
                 <Chatbox openChatId={this.state.openChatId} openChatName={this.state.openChatName} socket={this.state.socket} />
                 

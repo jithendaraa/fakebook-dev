@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
-// import socketIoClient from 'socket.io-client';
 import MyBtn from '../../UI/Button/Button';
-import classes from '../Users/Users.css'
+import classes from '../Users/Users.css';
 
 class Chatbox extends Component {
 
@@ -54,7 +53,6 @@ class Chatbox extends Component {
         this.props.fetchUser();
 
         this.props.socket.on("connect", () => {
-            console.log("socket connected to chatbox " + this.props.socket.id);
 
             this.props.socket.on("output", async chats => {
                 console.log("private chats received");
