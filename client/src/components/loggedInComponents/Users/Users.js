@@ -48,8 +48,10 @@ class Users extends Component {
 
 
     componentDidMount() {
-        this.state.socket.on('connect', () => {
+        this.state.socket.on('connect', async() => {
             console.log("connected to sockets " + this.state.socket.id);
+
+            await this.props.setSocket(this.state.socket);
 
             let connectedUserObj = {
                 displayName: this.props.auth.displayName,
@@ -80,10 +82,11 @@ class Users extends Component {
             }
         });
 
-        this.state.socket.on('playReq', res => {
-            // console.log(res);
-            let users = document.getElementById('users');
-            
+        
+
+        this.state.socket.on('acceptReq', res => {
+            console.log("hey");
+
 
         });
     }
@@ -153,7 +156,8 @@ class Users extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        myFriends: state.myFriends
+        myFriends: state.myFriends,
+        socket: state.socket
     }
 }
 

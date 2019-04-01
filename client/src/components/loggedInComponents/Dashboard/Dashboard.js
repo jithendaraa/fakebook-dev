@@ -8,10 +8,6 @@ import SimpleCard from '../../UI/Card/SimpleCard';
 import MyFriends from '../../UI/MyFriends/MyFriends';
 import classes from './Dashboard.css';
 import Spinner from '../../UI/Spinner/Spinner';
-// import socketIoClient from 'socket.io-client';
-// import { Button } from '@material-ui/core';
-// import MyBtn from '../../UI/Button/Button';
-// import Chatbox from '../Chat/Chatbox';
 import Users from '../Users/Users'
 
 
@@ -99,7 +95,6 @@ class Dashboard extends Component {
                 <div className={classes.Header}>
                     <div>
                         <FrndReqNotifPopper />
-                    
                     </div>
                     <div style={{ paddingLeft: "10px" }}>
                         <MyFriends />
@@ -124,7 +119,8 @@ const mapStateToProps = (state) => {
         auth: state.auth,
         frndReq: state.frndReq,
         dashboardPosts: state.dashboardPosts,
-        myFriends: state.myFriends
+        myFriends: state.myFriends,
+        socket: state.socket
     }
 }
 

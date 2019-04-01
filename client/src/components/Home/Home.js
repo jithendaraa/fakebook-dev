@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import classes from './Home.css';
+import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
 import NavigationItems from '../Navigation/NavigationItems';
@@ -8,7 +9,7 @@ import Header from '../loggedInComponents/Header';
 import Dashboard from '../loggedInComponents/Dashboard/Dashboard';
 import Spinner from '../UI/Spinner/Spinner';
 import GOAuthBtn from '../UI/Button/GoogleOAuthBtn';
-
+import Pictionary from '../loggedInComponents/Pictionary/Pictionary';
 
 
 const guestHome = (
@@ -40,6 +41,26 @@ const guestHome = (
 
 class Home extends Component {
 
+    state = {
+        playMode: 'off'
+    }
+
+    // componentDidMount() {
+    //     if(this.props.socket !== null){
+    //         this.props.socket.on('acceptReq', res => {
+    //             console.log("acepec")
+    //         })
+    //     }
+    // }
+
+    socketActive = () => {
+        this.props.socket.on('acceptReq', async res => {
+            await this.setState({ playMode: "on" });  
+        })
+    }
+
+    
+
     renderContent() {
         switch (this.props.auth) {
             case null:
@@ -64,14 +85,18 @@ class Home extends Component {
     render() {
         return (
             <div>
-                {this.renderContent()}
+                {this.state.playMode === 'off' ? this.renderContent() : (<Pictionary />)}
+                {this.props.socket !== null ? this.socketActive() : null}
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    return { auth: state.auth };
+    return { 
+        auth: state.auth,
+        socket: state.socket 
+    };
 }
 
 export default connect(mapStateToProps)(Home);

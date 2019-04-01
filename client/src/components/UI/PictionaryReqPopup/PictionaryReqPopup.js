@@ -10,6 +10,7 @@ import MyButton from '../Button/Button';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
+
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
@@ -45,17 +46,32 @@ class PictionaryReqPopup extends React.Component {
                 userId: res.fromUserId,
                 socketId: res.fromSocketId
             };
+            let countdownDiv = document.getElementById('countdown');
+            let i = 4;
+            let countdown = setInterval(() => {
+                countdownDiv.innerHTML = i;
+                i -= 1;
+                if (i === 0) {
+                    clearInterval(countdown);
+                }
+            }, 1000);
         });
 
         this.props.socket.on('cancelReq', async () => {
             await this.setState({ open: false });
             this.sent = 0;
+            
             document.getElementById('reqbtn').innerHTML = "Pictionary";
         });
 
         this.props.socket.on('acceptReq', res => {
-            console.log("hey");
-        });
+            this.sent = -1;
+            if(this.x !== null){
+                clearInterval(this.x);
+            }
+        })
+
+        
     }
 
     pictionaryReq = (friend) => {
@@ -82,7 +98,7 @@ class PictionaryReqPopup extends React.Component {
                 fromSocketId: this.props.socket.id,
                 toUserId: friend._id
             }
-            if(this.x !== null){
+            if (this.x !== null) {
                 clearTimeout(this.x);
             }
             this.sent = 0;
@@ -104,7 +120,7 @@ class PictionaryReqPopup extends React.Component {
             fromSocketId: this.props.socket.id,
             toUserId: friend._id
         }
-        if(this.x !== null){
+        if (this.x !== null) {
             clearTimeout(this.x);
         }
         // this.props.socket.emit('cancelReq', data);
@@ -123,7 +139,7 @@ class PictionaryReqPopup extends React.Component {
             reqToUserId: this.props.auth._id,
             reqToSocketId: this.props.socket.id
         };
-
+        
         this.props.socket.emit('acceptReq', data);
 
     }
@@ -148,8 +164,8 @@ class PictionaryReqPopup extends React.Component {
           </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
-                            You can accept or decline their request
-            </DialogContentText>
+                            Request auto cancels in <div id="countdown">5</div>
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => { this.handleClose(this.props.friend) }} color="primary">

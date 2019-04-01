@@ -163,6 +163,10 @@ export const getDp = () => async dispatch => {
     dispatch({ type: actions.GET_DP, payload: dpSrc });
 }
 
+export const setSocket = (socket) => dispatch => {
+    dispatch({ type: actions.SET_SOCKET, payload: socket});
+}
+
 
 
 
