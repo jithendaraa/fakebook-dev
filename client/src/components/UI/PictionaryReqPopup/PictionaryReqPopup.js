@@ -61,18 +61,18 @@ class PictionaryReqPopup extends React.Component {
         this.props.socket.on('cancelReq', async () => {
             await this.setState({ open: false });
             this.sent = 0;
-            
+
             document.getElementById('reqbtn').innerHTML = "Pictionary";
         });
 
         this.props.socket.on('acceptReq', res => {
             this.sent = -1;
-            if(this.x !== null){
+            if (this.x !== null) {
                 clearInterval(this.x);
             }
         })
 
-        
+
     }
 
     pictionaryReq = (friend) => {
@@ -140,7 +140,7 @@ class PictionaryReqPopup extends React.Component {
             reqToUserId: this.props.auth._id,
             reqToSocketId: this.props.socket.id
         };
-        
+
         this.props.socket.emit('acceptReq', data);
 
     }
@@ -148,9 +148,7 @@ class PictionaryReqPopup extends React.Component {
     render() {
         return (
             <div>
-                {/* <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          + New Story
-        </Button> */}
+
                 <MyButton id="reqbtn" onClick={() => { this.pictionaryReq(this.props.friend) }} btnText="Pictionary" />
                 <Dialog
                     open={this.state.open}

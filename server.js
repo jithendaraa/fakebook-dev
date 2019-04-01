@@ -172,6 +172,15 @@ io.on('connection', async (socket) => {
 
   });
 
+  socket.on('draw', data => {
+    console.log(data);
+    io.to(data.to).emit('draw', data);
+  });
+
+  socket.on('clearCanvas', data => {
+    io.to(data.to).emit('clearCanvas', data);
+  })
+
 
 
   //Socket Disconnect
