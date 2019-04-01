@@ -45,17 +45,23 @@ class Home extends Component {
         playMode: 'off'
     }
 
+    constructor(props) {
+        super(props);
+
+        this.res = null;
+    }
+
     // componentDidMount() {
-    //     if(this.props.socket !== null){
-    //         this.props.socket.on('acceptReq', res => {
-    //             console.log("acepec")
-    //         })
-    //     }
+    //     setInterval(() => {
+    //         console.log("sad")
+    //     }, 5000)
     // }
 
     socketActive = () => {
         this.props.socket.on('acceptReq', async res => {
-            await this.setState({ playMode: "on" });  
+            this.res = res;  
+            await this.setState({ playMode: "on" });
+            
         })
     }
 
@@ -85,7 +91,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                {this.state.playMode === 'off' ? this.renderContent() : (<Pictionary />)}
+                {(this.state.playMode === 'off') ? this.renderContent() : (<Pictionary res={this.res}/>)}
                 {this.props.socket !== null ? this.socketActive() : null}
             </div>
         );

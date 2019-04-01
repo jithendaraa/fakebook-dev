@@ -4,6 +4,7 @@ import * as actions from '../../../actions';
 import socketIoClient from 'socket.io-client';
 import classes from './Pictionary.css';
 import Button from '../../UI/Button/Button';
+import { stat } from 'fs';
 
 // const socket= socketIoClient('http://localhost:5000');
 
@@ -20,6 +21,9 @@ class Pictionary extends Component {
             gameboardCtx: null,
             dragging: false
         };
+        this.myTurn = 0;
+        this.turns = 0;
+        this.res = null;
     }
 
     clear = () => {
@@ -61,7 +65,7 @@ class Pictionary extends Component {
     }
 
     putPoint = (e) => {
-        if (this.state.dragging === true) {
+        if (this.state.dragging === true && this.myTurn === 1) {
             this.state.gameboardCtx.lineTo(e.offsetX, e.offsetY);
             this.state.gameboardCtx.stroke();
             this.state.gameboardCtx.beginPath();
@@ -80,13 +84,84 @@ class Pictionary extends Component {
         gameboardCanvas.addEventListener('mousemove', this.putPoint);
         gameboardCanvas.addEventListener('mouseup', this.deactivate);
         this.state.gameboardCtx.lineWidth = this.radius * 2;
+        this.res = this.props.res;
+        
+        let status = document.getElementById('playStatus');
+  
+        let playerA = this.res.socketIds[0];
+        let playerB = this.res.socketIds[1];
+        let toggleTimer;
+
+        if(this.props.socket.id === playerA){
+            this.myTurn = 1;
+            status.innerHTML = "playing";
+        }
+        else if(this.props.socket.id === playerB){
+            this.myTurn = 0;
+            status.innerHTML = "not playing";
+        }
+        toggleTimer = setInterval(() => {
+                this.myTurn = !this.myTurn;
+                console.log("exec tuen " + this.turn);
+                if(this.myTurn === 0){
+                    status.innerHTML = "not playing";
+                }
+                else if(this.myTurn === 1){
+                    status.innerHTML = "playing";
+                }
+                this.turns += 1;
+                if(this.turns === 5){
+                    clearInterval(toggleTimer)
+                }
+            }, 5000);
     }
+
+    // socketEvents = () => {
+    //     console.log("IN");
+        // console.log(this.res)
+        // this.props.socket.on('acceptReq', res => {
+            // console.log(res.socketIds[0])                               // guy who sent the follow request will also have to start first
+            // let status = document.getElementById('playStatus');
+
+            // let playerA = res.socketIds[0];
+            // let playerA = res.socketIds[0];
+
+            // let toggleTimer;
+
+            // if(this.props.socket.id === playerA){
+            //     this.myTurn = 1;
+            //     status.innerHTML = "playing";
+
+            // }
+
+            // else if(this.props.socket.id === playerB){
+            //     this.myTurn = 0;
+            //     status.innerHTML = "not playing";
+            // }
+
+            // toggleTimer = setInterval(() => {
+            //     this.myTurn = !this.myTurn;
+            //     if(this.myTurn === 0){
+            //         status.innerHTML = "not playing";
+            //     }
+            //     else if(this.myTurn === 1){
+            //         status.innerHTML = "playing";
+            //     }
+            //     this.turns += 1;
+            //     if(this.turns === 5){
+            //         clearInterval(toggleTimer)
+            //     }
+            // }, 5000);
+            // console.log("xD")
+
+        // })
+    // }
 
 
     render() {
         return (
             <div style={{ color: "white" }}>
-
+                    <div id="playStatus" style={{color: "white"}}>Not playing</div>
                 {/* {this.props.auth === null ? null : (<h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, {this.props.auth.displayName.split(" ")[0]}</h2>)} */}
 
                 <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary</h2>
@@ -123,7 +198,9 @@ class Pictionary extends Component {
                         <center style={{ height: "50px", width: "300px" }}><h2>Them</h2></center>
                         <canvas height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
                     </div>
+                    {/* {this.props.socket !== null ? this.socketEvents() : null} */}
                 </div>
+                
 
 
 
@@ -134,7 +211,8 @@ class Pictionary extends Component {
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        socket: state.socket
     }
 }
 

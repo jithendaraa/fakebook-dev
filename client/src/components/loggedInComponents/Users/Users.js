@@ -82,12 +82,9 @@ class Users extends Component {
             }
         });
 
-        
-
+    
         this.state.socket.on('acceptReq', res => {
             console.log("hey");
-
-
         });
     }
 

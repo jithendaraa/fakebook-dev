@@ -46,6 +46,7 @@ class PictionaryReqPopup extends React.Component {
                 userId: res.fromUserId,
                 socketId: res.fromSocketId
             };
+            console.log("gotcha bb")
             let countdownDiv = document.getElementById('countdown');
             let i = 4;
             let countdown = setInterval(() => {

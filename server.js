@@ -169,8 +169,8 @@ io.on('connection', async (socket) => {
     socketIds.map(socketId => {
       io.to(socketId).emit('acceptReq', data);
     });
-  });
 
+  });
 
 
 
