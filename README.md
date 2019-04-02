@@ -17,3 +17,4 @@ A Facebook ripoff using React/Redux and node, express, passport for Google OAuth
 - Fetch and display chat history of a particular friend
 - Open close toggle chat windows
 - Live private chat across /newPost, /addFrnd, /myPosts
+- Play live Pictography with alternating turns. Total rounds = 5 for 30 seconds each.
