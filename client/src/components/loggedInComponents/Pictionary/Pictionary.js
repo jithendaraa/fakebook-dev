@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-import socketIoClient from 'socket.io-client';
+
 import classes from './Pictionary.css';
 import Button from '../../UI/Button/Button';
-import { stat } from 'fs';
+
+import RandomWord from 'react-random-word';
 
 // const socket= socketIoClient('http://localhost:5000');
+const randomWords = require('random-words');
 
 class Pictionary extends Component {
 
@@ -17,16 +19,34 @@ class Pictionary extends Component {
         this.gbWidth = 700;
         this.gbHeight = 500;
         this.radius = 5;
+        this.randomWord = randomWords();
+        this.myTurn = false;
         this.state = {
             gameboardCtx: null,
-            dragging: false
+            dragging: false,
+            component: (<RandomWord 
+                            word={this.randomWord.length > 3 ? "<" +this.randomWord + " />" : "<" + this.reword() + " />"} 
+                            speed={100} 
+                            rounds={10} 
+                            letters="1234567890"/>) 
         };
-        this.myTurn = false;
+        
         this.turns = 0;
         this.res = null;
-        this.roundLength = 30;          //In seconds
+        this.roundLength = 10;          //In seconds
         this.totalRounds = 5;
+        
     }
+
+    reword = () => {
+        this.randomWord = randomWords();
+        if(this.randomWord.length <= 3){
+          this.reword();
+        }
+        else if(this.randomWord.length > 3){
+          return this.randomWord;
+        }
+      }
 
     //Clear Canvas
     clear = () => {
@@ -125,16 +145,25 @@ class Pictionary extends Component {
         alert("Game over");
     }
 
-    async componentDidMount() {
-        let gameboardCanvas = document.getElementById("gameboardCanvas");
-        await this.setState({ gameboardCtx: gameboardCanvas.getContext('2d') });
+    myTurnOnChange = async() => {
+       
+        if(this.myTurn === false){
+            await this.setState({ component: (<p>Guess the word</p>)})
+        }
+        else if(this.myTurn === true){
+            await this.setState({ component: (<RandomWord 
+                word={this.randomWord.length > 3 ? "<" +this.randomWord + " />" : "<" + this.reword() + " />"} 
+                speed={100} 
+                rounds={10} 
+                letters="1234567890"/>) 
+            });
 
-        gameboardCanvas.addEventListener('mousedown', this.activate);
-        gameboardCanvas.addEventListener('mousemove', this.putPoint);
-        gameboardCanvas.addEventListener('mouseup', this.deactivate);
-        this.state.gameboardCtx.lineWidth = this.radius * 2;
+        }
+    }
+
+    setTurns = () => {
         this.res = this.props.res;
-
+    
         let status = document.getElementById('playStatus');
 
         let playerA = this.res.reqFromSocketId;
@@ -143,26 +172,32 @@ class Pictionary extends Component {
 
         if (this.props.socket.id === playerA) {
             this.myTurn = true;
+            this.myTurnOnChange();
             status.innerHTML = "Draw";
             status.style.backgroundColor = "green";
             status.style.borderRadius = "4px";
         }
         else if (this.props.socket.id === playerB) {
             this.myTurn = false;
+            this.myTurnOnChange();
             status.innerHTML = "Watching";
             status.style.backgroundColor = "darkred";
             status.style.borderRadius = "4px";
         }
+        
         toggleTimer = setInterval(() => {
             this.state.gameboardCtx.fillStyle = "white";
             this.state.gameboardCtx.strokeStyle = "white";
             this.myTurn = !this.myTurn;
-            console.log(this.myTurn)
+            this.myTurnOnChange();
+            
             console.log("exec turn " + this.turns);
             if (this.myTurn === false) {
+                console.log(this.state.component);
                 status.innerHTML = "Watching";
                 status.style.backgroundColor = "darkred";
                 status.style.borderRadius = "4px";
+                
             }
             else if (this.myTurn === true) {
                 status.innerHTML = "Draw";
@@ -177,6 +212,9 @@ class Pictionary extends Component {
             }
         }, this.roundLength * 1000);
 
+    }
+
+    socketEvents = () => {
         this.props.socket.on('draw', res => {
 
             let activeColor = this.state.gameboardCtx.fillStyle;
@@ -206,16 +244,29 @@ class Pictionary extends Component {
 
         this.props.socket.on('newPath', res => {
             this.state.gameboardCtx.beginPath();
-        })
+        });
+    }
+
+    async componentDidMount() {
+        let gameboardCanvas = document.getElementById("gameboardCanvas");
+        await this.setState({ gameboardCtx: gameboardCanvas.getContext('2d') });
+
+        gameboardCanvas.addEventListener('mousedown', this.activate);
+        gameboardCanvas.addEventListener('mousemove', this.putPoint);
+        gameboardCanvas.addEventListener('mouseup', this.deactivate);
+        this.state.gameboardCtx.lineWidth = this.radius * 2;
+        this.setTurns();
+        this.socketEvents();
     }
 
     render() {
         return (
             <div style={{ color: "white" }}>
 
-                {/* {this.props.auth === null ? null : (<h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, {this.props.auth.displayName.split(" ")[0]}</h2>)} */}
-
                 <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary</h2>
+                <h3 id="word" style={{ textAlign: "center" }}>
+                    {this.state.component}
+                </h3>
 
                 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
                     <div>
