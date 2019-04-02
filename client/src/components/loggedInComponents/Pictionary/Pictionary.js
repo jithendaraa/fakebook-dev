@@ -25,8 +25,10 @@ class Pictionary extends Component {
         this.turns = 0;
         this.res = null;
         this.roundLength = 30;          //In seconds
+        this.totalRounds = 5;
     }
 
+    //Clear Canvas
     clear = () => {
         let activeCol = this.state.gameboardCtx.fillStyle;
         this.state.gameboardCtx.fillStyle = "white";
@@ -42,6 +44,7 @@ class Pictionary extends Component {
         this.props.socket.emit('clearCanvas', { to: to });
     }
 
+    //What colors can I draw with?
     colorSelectDefault = () => {
         let colorIds = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
         colorIds.map(colorId => {
@@ -52,6 +55,7 @@ class Pictionary extends Component {
         });
     }
 
+    //Choose color to draw with
     colorSelect = (activeColor) => {
         console.log(activeColor);
         this.colorSelectDefault();
@@ -63,16 +67,28 @@ class Pictionary extends Component {
         this.state.gameboardCtx.strokeStyle = activeColor;
     }
 
+    //mousedown
     activate = async (e) => {
         await this.setState({ dragging: true });
         this.putPoint(e);
     }
 
+    //mouseup
     deactivate = async () => {
         await this.setState({ dragging: false });
         this.state.gameboardCtx.beginPath();
+        let toSocketId;
+        if (this.props.socket.id === this.res.reqFromSocketId) {
+            toSocketId = this.res.reqToSocketId;
+        }
+        else if (this.props.socket.id === this.res.reqToSocketId) {
+            toSocketId = this.res.reqFromSocketId;
+        }
+        
+        this.props.socket.emit('newPath', {to: toSocketId});
     }
 
+    //Draw or put a point
     putPoint = (e) => {
         if (this.state.dragging === true && this.myTurn === true) {
             this.state.gameboardCtx.lineTo(e.offsetX, e.offsetY);
@@ -103,6 +119,7 @@ class Pictionary extends Component {
         }
     }
 
+    //After total no of rounds are finished
     gameOver = () => {
         this.myTurn = false;
         alert("Game over");
@@ -154,14 +171,13 @@ class Pictionary extends Component {
             }
             this.turns += 1;
             this.clear();
-            if (this.turns === 5) {
+            if (this.turns === this.totalRounds) {
                 clearInterval(toggleTimer);
                 this.gameOver();
             }
         }, this.roundLength * 1000);
 
         this.props.socket.on('draw', res => {
-            console.log(res);
 
             let activeColor = this.state.gameboardCtx.fillStyle;
             this.state.gameboardCtx.fillStyle = res.color;
@@ -169,13 +185,13 @@ class Pictionary extends Component {
             let x = res.x;
             let y = res.y;
             let radius = res.radius;
-            // this.state.gameboardCtx.lineTo(x, y);
-            // this.state.gameboardCtx.stroke();
+            this.state.gameboardCtx.lineTo(x, y);
+            this.state.gameboardCtx.stroke();
             this.state.gameboardCtx.beginPath();
             this.state.gameboardCtx.arc(x, y, radius, 0, Math.PI * 2);
             this.state.gameboardCtx.fill();
-            // this.state.gameboardCtx.beginPath();
-            // this.state.gameboardCtx.moveTo(x, y);
+            this.state.gameboardCtx.beginPath();
+            this.state.gameboardCtx.moveTo(x, y);
             this.state.gameboardCtx.fillStyle = activeColor; 
             this.state.gameboardCtx.strokeStyle = activeColor; 
 
@@ -186,6 +202,10 @@ class Pictionary extends Component {
             this.state.gameboardCtx.fillStyle = "white";
             this.state.gameboardCtx.fillRect(0, 0, this.gbWidth, this.gbHeight);
             this.state.gameboardCtx.fillStyle = activeCol;
+        });
+
+        this.props.socket.on('newPath', res => {
+            this.state.gameboardCtx.beginPath();
         })
     }
 
