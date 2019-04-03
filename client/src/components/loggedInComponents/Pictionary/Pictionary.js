@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-
+import Input from '../../UI/Input/Input';
 import classes from './Pictionary.css';
 import Button from '../../UI/Button/Button';
 
@@ -21,32 +21,49 @@ class Pictionary extends Component {
         this.radius = 5;
         this.randomWord = randomWords();
         this.myTurn = false;
+        this.res = this.props.res;
         this.state = {
             gameboardCtx: null,
             dragging: false,
-            component: (<RandomWord 
-                            word={this.randomWord.length > 3 ? "<" +this.randomWord + " />" : "<" + this.reword() + " />"} 
-                            speed={100} 
-                            rounds={10} 
-                            letters="1234567890"/>) 
+            component: (<RandomWord
+                word={(this.randomWord.length > 3) && (this.randomWord !== "undefined") && (this.randomWord !== undefined) ? "<" + this.randomWord + " />" : "<" + this.reword() + " />"}
+                speed={100}
+                rounds={10}
+                letters="1234567890" />),
+            score: 0,
+            alreadyCorrect: false
         };
-        
+        this.firstWord = this.randomWord;
+        this.wordToGuess = null;
         this.turns = 0;
-        this.res = null;
+        this.currentWord = null;
         this.roundLength = 10;          //In seconds
         this.totalRounds = 5;
-        
     }
 
     reword = () => {
         this.randomWord = randomWords();
-        if(this.randomWord.length <= 3){
-          this.reword();
+        if (this.randomWord.length <= 3 || this.randomWord === "undefined" || this.randomWord === undefined) {
+            this.reword();
         }
-        else if(this.randomWord.length > 3){
-          return this.randomWord;
+        else if (this.randomWord.length > 3) {
+            let toSocketId;
+            if (this.props.socket.id === this.res.reqFromSocketId) {
+                toSocketId = this.res.reqToSocketId;
+            }
+            else if (this.props.socket.id === this.res.reqToSocketId) {
+                toSocketId = this.res.reqFromSocketId;
+            }
+            this.props.socket.emit('word to guess', {
+                word: this.randomWord,
+                to: toSocketId
+            });
+            if (this.currentWord !== null) {
+                this.currentWord = this.randomWord;
+            }
+            return this.randomWord;
         }
-      }
+    }
 
     //Clear Canvas
     clear = () => {
@@ -104,8 +121,8 @@ class Pictionary extends Component {
         else if (this.props.socket.id === this.res.reqToSocketId) {
             toSocketId = this.res.reqFromSocketId;
         }
-        
-        this.props.socket.emit('newPath', {to: toSocketId});
+
+        this.props.socket.emit('newPath', { to: toSocketId });
     }
 
     //Draw or put a point
@@ -145,25 +162,26 @@ class Pictionary extends Component {
         alert("Game over");
     }
 
-    myTurnOnChange = async() => {
-       
-        if(this.myTurn === false){
-            await this.setState({ component: (<p>Guess the word</p>)})
+    myTurnOnChange = async () => {
+        if (this.myTurn === false) {
+            document.getElementById("guessAns").style.display = "block";
+            await this.setState({ component: (<p>Guess the word</p>) });
         }
-        else if(this.myTurn === true){
-            await this.setState({ component: (<RandomWord 
-                word={this.randomWord.length > 3 ? "<" +this.randomWord + " />" : "<" + this.reword() + " />"} 
-                speed={100} 
-                rounds={10} 
-                letters="1234567890"/>) 
+        else if (this.myTurn === true) {
+            document.getElementById("guessAns").style.display = "none";
+            await this.setState({
+                component: (<RandomWord
+                    word={"<" + this.reword() + " />"}
+                    speed={100}
+                    rounds={10}
+                    letters="1234567890" />)
             });
-
         }
     }
 
     setTurns = () => {
         this.res = this.props.res;
-    
+
         let status = document.getElementById('playStatus');
 
         let playerA = this.res.reqFromSocketId;
@@ -172,46 +190,114 @@ class Pictionary extends Component {
 
         if (this.props.socket.id === playerA) {
             this.myTurn = true;
+            document.getElementById("guessAns").style.display = "none";
             this.myTurnOnChange();
             status.innerHTML = "Draw";
             status.style.backgroundColor = "green";
             status.style.borderRadius = "4px";
+
+            let toSocketId;
+            if (this.props.socket.id === this.res.reqFromSocketId) {
+                toSocketId = this.res.reqToSocketId;
+            }
+            else if (this.props.socket.id === this.res.reqToSocketId) {
+                toSocketId = this.res.reqFromSocketId;
+            }
+
+            this.props.socket.emit('firstWord', {
+                firstWord: this.firstWord,
+                to: toSocketId
+            });
+            // console.log("emmited first word");
         }
         else if (this.props.socket.id === playerB) {
             this.myTurn = false;
+            document.getElementById("guessAns").style.display = "block";
             this.myTurnOnChange();
             status.innerHTML = "Watching";
             status.style.backgroundColor = "darkred";
             status.style.borderRadius = "4px";
         }
-        
-        toggleTimer = setInterval(() => {
+        if (this.currentWord === null) {
+            this.currentWord = this.firstWord;
+        }
+        else if (this.currentWord !== null) {
+            this.currentWord = this.randomWord;
+        }
+
+
+        if (this.myTurn === true) {
+            let toSocketId;
+            if (this.props.socket.id === this.res.reqFromSocketId) {
+                toSocketId = this.res.reqToSocketId;
+            }
+            else if (this.props.socket.id === this.res.reqToSocketId) {
+                toSocketId = this.res.reqFromSocketId;
+            }
+
+            this.props.socket.emit('currentWord', {
+                currentWord: this.currentWord,
+                to: toSocketId
+            });
+        }
+
+
+
+        toggleTimer = setInterval(async() => {
             this.state.gameboardCtx.fillStyle = "white";
             this.state.gameboardCtx.strokeStyle = "white";
             this.myTurn = !this.myTurn;
             this.myTurnOnChange();
             
+            if (this.myTurn === true) {
+                let toSocketId;
+                if (this.props.socket.id === this.res.reqFromSocketId) {
+                    toSocketId = this.res.reqToSocketId;
+                }
+                else if (this.props.socket.id === this.res.reqToSocketId) {
+                    toSocketId = this.res.reqFromSocketId;
+                }
+
+                this.props.socket.emit('currentWord', {
+                    currentWord: this.currentWord,
+                    to: toSocketId
+                });
+            }
+
+
+            let toSocketId;
+            if (this.props.socket.id === this.res.reqFromSocketId) {
+                toSocketId = this.res.reqToSocketId;
+            }
+            else if (this.props.socket.id === this.res.reqToSocketId) {
+                toSocketId = this.res.reqFromSocketId;
+            }
+
+            this.props.socket.emit('firstWord', {
+                firstWord: this.firstWord,
+                to: toSocketId
+            });
             console.log("exec turn " + this.turns);
             if (this.myTurn === false) {
-                console.log(this.state.component);
                 status.innerHTML = "Watching";
                 status.style.backgroundColor = "darkred";
                 status.style.borderRadius = "4px";
-                
+
             }
             else if (this.myTurn === true) {
                 status.innerHTML = "Draw";
                 status.style.backgroundColor = "green";
                 status.style.borderRadius = "4px";
             }
+
             this.turns += 1;
             this.clear();
             if (this.turns === this.totalRounds) {
                 clearInterval(toggleTimer);
                 this.gameOver();
             }
+            await this.setState({alreadyCorrect: false});
         }, this.roundLength * 1000);
-
     }
 
     socketEvents = () => {
@@ -230,8 +316,8 @@ class Pictionary extends Component {
             this.state.gameboardCtx.fill();
             this.state.gameboardCtx.beginPath();
             this.state.gameboardCtx.moveTo(x, y);
-            this.state.gameboardCtx.fillStyle = activeColor; 
-            this.state.gameboardCtx.strokeStyle = activeColor; 
+            this.state.gameboardCtx.fillStyle = activeColor;
+            this.state.gameboardCtx.strokeStyle = activeColor;
 
         });
 
@@ -245,9 +331,35 @@ class Pictionary extends Component {
         this.props.socket.on('newPath', res => {
             this.state.gameboardCtx.beginPath();
         });
+
+        this.props.socket.on('word to guess', async (res) => {
+            this.wordToGuess = res.word;
+
+        });
+
+        this.props.socket.on('firstWord', res => {
+            this.firstWord = res.firstWord;
+        });
+
+        this.props.socket.on('currentWord', res => {
+            this.currentWord = res.currentWord;
+            console.log("THE CURRENT WORD IS: " + this.currentWord);
+        })
+    }
+
+    guessClickHandler = async() => {
+        let val = document.getElementById("guessVal").value;
+        document.getElementById("guessVal").value = "";
+        if((val === this.currentWord) && (this.state.alreadyCorrect === false)){
+            let score = this.state.score;
+            await this.setState({ score: score+1, alreadyCorrect: true });
+        }
+
     }
 
     async componentDidMount() {
+
+        this.socketEvents();
         let gameboardCanvas = document.getElementById("gameboardCanvas");
         await this.setState({ gameboardCtx: gameboardCanvas.getContext('2d') });
 
@@ -255,15 +367,16 @@ class Pictionary extends Component {
         gameboardCanvas.addEventListener('mousemove', this.putPoint);
         gameboardCanvas.addEventListener('mouseup', this.deactivate);
         this.state.gameboardCtx.lineWidth = this.radius * 2;
+
         this.setTurns();
-        this.socketEvents();
+
     }
 
     render() {
         return (
             <div style={{ color: "white" }}>
 
-                <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary</h2>
+                <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, your score is: {this.state.score}</h2>
                 <h3 id="word" style={{ textAlign: "center" }}>
                     {this.state.component}
                 </h3>
@@ -271,9 +384,9 @@ class Pictionary extends Component {
                 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
                     <div>
                         <center style={{ height: "50px", width: "300px" }}><h2>Me</h2></center>
-                        <canvas height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
+                        <canvas id="canvas1" height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
                     </div>
-
+                   
                     <div>
                         <div style={{ display: "flex", flexWrap: "wrap" }}>
                             <canvas id="gameboardCanvas" width="700" height="500" style={{ border: "1px solid white", borderRadius: "5px", backgroundColor: "white" }}></canvas>
@@ -293,22 +406,28 @@ class Pictionary extends Component {
                                 <div id="yellow" className={classes.Yellow} onClick={() => { this.colorSelect('yellow') }}></div>
                             </div>
                         </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", paddingTop: "5px" }}>
-                            <Button btnText="Clear" onClick={this.clear} />
-                            <div id="playStatus" style={{ color: "white", paddingLeft: "5px", paddingRight: "5px", paddingTop: "7px", backgroundColor: "darkred", borderRadius: "4px" }}>Watching</div>
+                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", paddingTop: "5px", width: "700px" }}>
+                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                <Button btnText="Clear" onClick={this.clear} />
+                                <div id="playStatus" className={classes.PlayStatus}>Watching</div>
+                            </div>
+
+                            <div id="guessAns">
+                                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                    {this.state.alreadyCorrect === true ? (<p>Correct!</p>) : (<div><Input height="30px" id="guessVal" /> <Button id="guessAndBtn" btnText="Guess!" onClick={this.guessClickHandler} /></div>)}
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
 
                     <div>
                         <center style={{ height: "50px", width: "300px" }}><h2>Them</h2></center>
-                        <canvas height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
+                        <canvas id="canvas2" height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
                     </div>
 
                 </div>
-
-
-
 
             </div>
         )

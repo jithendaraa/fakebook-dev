@@ -182,7 +182,24 @@ io.on('connection', async (socket) => {
 
   socket.on('newPath', data => {
     io.to(data.to).emit('newPath', data);
+  });
+
+  socket.on('firstWord', data => {
+    console.log("FIRST WORD");
+    io.to(data.to).emit('firstWord', data);
+  });
+
+
+  socket.on('word to guess', data => {
+    console.log("WORD TO GUESS");
+    io.to(data.to).emit('word to guess', data);
+  });
+
+
+  socket.on('currentWord', data => {
+    io.to(data.to).emit('currentWord', data);
   })
+
 
 
 
