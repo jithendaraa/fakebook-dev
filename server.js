@@ -69,14 +69,14 @@ io.on('connection', async (socket) => {
       }
     }
 
-    console.log(reqdChats.length);
+    // console.log(reqdChats.length);
     socket.emit('output', reqdChats);
 
   });
 
   //Listen for messages from client side
   socket.on('message', async textObj => {
-    console.log("message received ")
+    // console.log("message received ")
 
     let chat = await new Chat({
       fromId: textObj.fromId,
@@ -88,7 +88,7 @@ io.on('connection', async (socket) => {
 
     let sendToClients = [];
     let i;
-    console.log(onlineUsers.length)
+    // console.log(onlineUsers.length)
     for (i = 0; i < onlineUsers.length; i++) {
       if ((onlineUsers[i].userId.toString() == textObj.toId.toString()) || (onlineUsers[i].userId.toString() == textObj.fromId.toString())) {
         if (onlineUsers[i].socketId.toString() !== socket.id.toString()) {
@@ -96,7 +96,7 @@ io.on('connection', async (socket) => {
         }
       }
     }
-    console.log(sendToClients)
+    // console.log(sendToClients)
     let userIds = [];
     userIds.push(textObj.fromId);
     userIds.push(textObj.toId);
@@ -108,7 +108,7 @@ io.on('connection', async (socket) => {
         }
       }
     });
-    console.log(socketIds);
+    // console.log(socketIds);
     socketIds = socketIds.filter(socketId => { return (socketId != socket.id) })
     socketIds.map(socketId => {
       io.to(socketId).emit('message', textObj);
@@ -117,7 +117,7 @@ io.on('connection', async (socket) => {
 
 
   socket.on('playReq', data => {
-    console.log("Play request");
+    // console.log("Play request");
     let reqdSocketIds = [];
     let i;
     for (i=0; i<onlineUsers.length; i++){
@@ -140,7 +140,7 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('cancelReq', data => {
-    console.log("cancel req")
+    // console.log("cancel req")
     let reqdSocketIds = [];
     let i;
     for (i=0; i<onlineUsers.length; i++){
@@ -164,7 +164,7 @@ io.on('connection', async (socket) => {
     socketIds.push(data.reqFromSocketId);
     socketIds.push(data.reqToSocketId);
 
-    console.log(socketIds)
+    // console.log(socketIds)
 
     socketIds.map(socketId => {
       io.to(socketId).emit('acceptReq', data);
@@ -185,20 +185,20 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('firstWord', data => {
-    console.log("FIRST WORD");
+    // console.log("FIRST WORD");
     io.to(data.to).emit('firstWord', data);
   });
 
 
   socket.on('word to guess', data => {
-    console.log("WORD TO GUESS");
+    // console.log("WORD TO GUESS");
     io.to(data.to).emit('word to guess', data);
   });
 
 
   socket.on('currentWord', data => {
     io.to(data.to).emit('currentWord', data);
-  })
+  });
 
 
 

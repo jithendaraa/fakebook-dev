@@ -31,14 +31,15 @@ class Pictionary extends Component {
                 rounds={10}
                 letters="1234567890" />),
             score: 0,
-            alreadyCorrect: false
+            alreadyCorrect: false,
+            currentWord: null,
+            turns: 1
         };
         this.firstWord = this.randomWord;
         this.wordToGuess = null;
         this.turns = 0;
-        this.currentWord = null;
         this.roundLength = 10;          //In seconds
-        this.totalRounds = 5;
+        this.totalRounds = 5 * 2;       //1 draw and 1 guess is counted as one round
     }
 
     reword = () => {
@@ -58,8 +59,8 @@ class Pictionary extends Component {
                 word: this.randomWord,
                 to: toSocketId
             });
-            if (this.currentWord !== null) {
-                this.currentWord = this.randomWord;
+            if (this.state.currentWord !== null) {
+                this.setState({ currentWord: this.randomWord });
             }
             return this.randomWord;
         }
@@ -179,7 +180,7 @@ class Pictionary extends Component {
         }
     }
 
-    setTurns = () => {
+    setTurns = async() => {
         this.res = this.props.res;
 
         let status = document.getElementById('playStatus');
@@ -208,7 +209,7 @@ class Pictionary extends Component {
                 firstWord: this.firstWord,
                 to: toSocketId
             });
-            // console.log("emmited first word");
+            
         }
         else if (this.props.socket.id === playerB) {
             this.myTurn = false;
@@ -218,11 +219,14 @@ class Pictionary extends Component {
             status.style.backgroundColor = "darkred";
             status.style.borderRadius = "4px";
         }
-        if (this.currentWord === null) {
-            this.currentWord = this.firstWord;
+        if (this.state.currentWord === null) {
+            
+            await this.setState({ currentWord: this.firstWord});
+
         }
-        else if (this.currentWord !== null) {
-            this.currentWord = this.randomWord;
+        else if (this.state.currentWord !== null) {
+            // this.currentWord = this.randomWord;
+            await this.setState({ currentWord: this.randomWord});
         }
 
 
@@ -236,7 +240,7 @@ class Pictionary extends Component {
             }
 
             this.props.socket.emit('currentWord', {
-                currentWord: this.currentWord,
+                currentWord: this.state.currentWord,
                 to: toSocketId
             });
         }
@@ -259,7 +263,7 @@ class Pictionary extends Component {
                 }
 
                 this.props.socket.emit('currentWord', {
-                    currentWord: this.currentWord,
+                    currentWord: this.state.currentWord,
                     to: toSocketId
                 });
             }
@@ -277,7 +281,7 @@ class Pictionary extends Component {
                 firstWord: this.firstWord,
                 to: toSocketId
             });
-            console.log("exec turn " + this.turns);
+            console.log("exec turn " + this.state.turns);
             if (this.myTurn === false) {
                 status.innerHTML = "Watching";
                 status.style.backgroundColor = "darkred";
@@ -289,10 +293,11 @@ class Pictionary extends Component {
                 status.style.backgroundColor = "green";
                 status.style.borderRadius = "4px";
             }
-
+            let turns = this.state.turns;
+            await this.setState({ turns: turns+1 });
             this.turns += 1;
             this.clear();
-            if (this.turns === this.totalRounds) {
+            if (this.state.turns === this.totalRounds) {
                 clearInterval(toggleTimer);
                 this.gameOver();
             }
@@ -341,16 +346,17 @@ class Pictionary extends Component {
             this.firstWord = res.firstWord;
         });
 
-        this.props.socket.on('currentWord', res => {
-            this.currentWord = res.currentWord;
-            console.log("THE CURRENT WORD IS: " + this.currentWord);
+        this.props.socket.on('currentWord', async res => {
+            // this.currentWord = res.currentWord;
+            await this.setState({ currentWord: res.currentWord })
+            console.log("THE CURRENT WORD IS: " + this.state.currentWord);
         })
     }
 
     guessClickHandler = async() => {
         let val = document.getElementById("guessVal").value;
         document.getElementById("guessVal").value = "";
-        if((val === this.currentWord) && (this.state.alreadyCorrect === false)){
+        if((val === this.state.currentWord) && (this.state.alreadyCorrect === false)){
             let score = this.state.score;
             await this.setState({ score: score+1, alreadyCorrect: true });
         }
@@ -376,7 +382,7 @@ class Pictionary extends Component {
         return (
             <div style={{ color: "white" }}>
 
-                <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, your score is: {this.state.score}</h2>
+                <h2 style={{ textAlign: "center" }}>Welcome to live Pictionary, your score is: {this.state.score}, Round number {Math.ceil(this.state.turns/2)}</h2>
                 <h3 id="word" style={{ textAlign: "center" }}>
                     {this.state.component}
                 </h3>
