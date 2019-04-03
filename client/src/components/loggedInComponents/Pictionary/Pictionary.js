@@ -33,7 +33,8 @@ class Pictionary extends Component {
             score: 0,
             alreadyCorrect: false,
             currentWord: null,
-            turns: 1
+            turns: 1,
+            myTurn: false
         };
         this.firstWord = this.randomWord;
         this.wordToGuess = null;
@@ -128,7 +129,7 @@ class Pictionary extends Component {
 
     //Draw or put a point
     putPoint = (e) => {
-        if (this.state.dragging === true && this.myTurn === true) {
+        if (this.state.dragging === true && this.state.myTurn === true) {
             this.state.gameboardCtx.lineTo(e.offsetX, e.offsetY);
             this.state.gameboardCtx.stroke();
             this.state.gameboardCtx.beginPath();
@@ -159,16 +160,16 @@ class Pictionary extends Component {
 
     //After total no of rounds are finished
     gameOver = () => {
-        this.myTurn = false;
+        this.setState({ myTurn: false});
         alert("Game over");
     }
 
     myTurnOnChange = async () => {
-        if (this.myTurn === false) {
+        if (this.state.myTurn === false) {
             document.getElementById("guessAns").style.display = "block";
             await this.setState({ component: (<p>Guess the word</p>) });
         }
-        else if (this.myTurn === true) {
+        else if (this.state.myTurn === true) {
             document.getElementById("guessAns").style.display = "none";
             await this.setState({
                 component: (<RandomWord
@@ -190,7 +191,7 @@ class Pictionary extends Component {
         let toggleTimer;
 
         if (this.props.socket.id === playerA) {
-            this.myTurn = true;
+            await this.setState({ myTurn: true });
             document.getElementById("guessAns").style.display = "none";
             this.myTurnOnChange();
             status.innerHTML = "Draw";
@@ -212,7 +213,7 @@ class Pictionary extends Component {
             
         }
         else if (this.props.socket.id === playerB) {
-            this.myTurn = false;
+            await this.setState({ myTurn: false });
             document.getElementById("guessAns").style.display = "block";
             this.myTurnOnChange();
             status.innerHTML = "Watching";
@@ -230,7 +231,7 @@ class Pictionary extends Component {
         }
 
 
-        if (this.myTurn === true) {
+        if (this.state.myTurn === true) {
             let toSocketId;
             if (this.props.socket.id === this.res.reqFromSocketId) {
                 toSocketId = this.res.reqToSocketId;
@@ -250,10 +251,11 @@ class Pictionary extends Component {
         toggleTimer = setInterval(async() => {
             this.state.gameboardCtx.fillStyle = "white";
             this.state.gameboardCtx.strokeStyle = "white";
-            this.myTurn = !this.myTurn;
+            let myTurn = this.state.myTurn;
+            await this.setState({ myTurn: !myTurn });
             this.myTurnOnChange();
             
-            if (this.myTurn === true) {
+            if (this.state.myTurn === true) {
                 let toSocketId;
                 if (this.props.socket.id === this.res.reqFromSocketId) {
                     toSocketId = this.res.reqToSocketId;
@@ -282,13 +284,13 @@ class Pictionary extends Component {
                 to: toSocketId
             });
             console.log("exec turn " + this.state.turns);
-            if (this.myTurn === false) {
+            if (this.state.myTurn === false) {
                 status.innerHTML = "Watching";
                 status.style.backgroundColor = "darkred";
                 status.style.borderRadius = "4px";
 
             }
-            else if (this.myTurn === true) {
+            else if (this.state.myTurn === true) {
                 status.innerHTML = "Draw";
                 status.style.backgroundColor = "green";
                 status.style.borderRadius = "4px";
@@ -414,7 +416,7 @@ class Pictionary extends Component {
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", paddingTop: "5px", width: "700px" }}>
                             <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                <Button btnText="Clear" onClick={this.clear} />
+                                <Button btnText="Clear" onClick={this.state.myTurn === true ? this.clear : null} />
                                 <div id="playStatus" className={classes.PlayStatus}>Watching</div>
                             </div>
 
