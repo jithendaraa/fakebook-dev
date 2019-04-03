@@ -11,7 +11,7 @@ import Pictionary from './components/loggedInComponents/Pictionary/Pictionary.js
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
-
+import Guess from './components/loggedInComponents/Pictionary/Guess';
 
 
 class App extends Component {
@@ -30,7 +30,7 @@ class App extends Component {
         <Route path="/myPosts" exact component={MyPosts}></Route>
         <Route path="/newStory" component={NewStory}></Route>
         <Route path="/addFrnd" component={AddFrnd}></Route>
-        <Route path="/pictionary" component={Pictionary}></Route>
+        <Route path="/guess" component={Guess}></Route>
       </div>
     );
   }
