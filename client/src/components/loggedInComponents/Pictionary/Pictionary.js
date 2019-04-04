@@ -4,7 +4,7 @@ import * as actions from '../../../actions';
 import Input from '../../UI/Input/Input';
 import classes from './Pictionary.css';
 import Button from '../../UI/Button/Button';
-
+import Guess from './Guess';
 import RandomWord from 'react-random-word';
 
 // const socket= socketIoClient('http://localhost:5000');
@@ -435,6 +435,10 @@ class Pictionary extends Component {
                         <canvas id="canvas2" height="450" width="300" style={{ border: "1px solid white", borderRadius: "5px" }}></canvas>
                     </div>
 
+                </div>
+
+                <div id="guess">
+                            {(this.state.myTurn === false) && (this.state.currentWord !== null) ? (<Guess currentWord={this.state.currentWord} />) : null}
                 </div>
 
             </div>

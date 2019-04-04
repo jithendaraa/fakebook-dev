@@ -24,7 +24,6 @@ class Guess extends Component {
         }
         
         return wordLetters.sort();
-        
     }
 
     async componentDidMount() {
